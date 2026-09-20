@@ -1,0 +1,795 @@
+{
+  "schemaVersion": 4,
+  "runId": "research-v4-20260920-061138",
+  "checkedAt": "2026-09-20T06:11:38Z",
+  "validUntil": "2026-09-21T00:11:38Z",
+  "summary": "Both research watches are now reconciled. The usage watch reports 53 community cases and five mechanisms/fixes; these are imported totals, separate from nine individually reviewed usage reports. New context-overhead evidence and a watch-only image-replay report have been read. The watches disagree about the September 19 comment: we retain an ambiguous hint, no announced reset or Tuesday deadline, and ELEVATED banked outlook with low confidence.",
+  "historyNote": "Imported from previous research: the original Reset Watch conversation and its scheduled reports. Public claims and original links are retained; private account observations are excluded. Imported claims are not newly verified primary evidence. Exact post times and relative Help Center update dates have not been promoted to verified timestamps. Version 4 also imports dated usage-watch summaries. Their totals and outlooks retain separate provenance from individually reviewed sources.",
+  "baselines": [
+    {
+      "kind": "reset",
+      "date": "12 September 2026",
+      "label": "Latest automatic reset in our research record",
+      "detail": "Earlier research reported staff confirmation of rollout and broad Codex / ChatGPT Work scope. The original posts could not be independently reverified in this pass."
+    },
+    {
+      "kind": "banked",
+      "date": "4 September 2026",
+      "label": "Latest directly documented banked offer in this report",
+      "detail": "This is a verified historical reference, not a claim that it was the latest distribution. Search results suggest later September 5 and 9 activity that still needs original-source and scope checks; replacements must not count as new broad grants."
+    }
+  ],
+  "coverage": [
+    {
+      "channel": "Reset announcement watch",
+      "status": "checked",
+      "detail": "Supplied correction reconciled against its earlier findings; ambiguous September 19 interpretation retained."
+    },
+    {
+      "channel": "Usage and credits watch",
+      "status": "checked",
+      "detail": "Original source task located and latest report read. New public findings and dated aggregates imported; private advice excluded."
+    },
+    {
+      "channel": "GitHub reports and merged fixes",
+      "status": "partial",
+      "detail": "Read #46747, #46761 and PR #46749. Nine strict notebook reports reviewed overall, one watch-only entry. Full 53-case reconstruction remains pending."
+    },
+    {
+      "channel": "OpenAI Status history",
+      "status": "checked",
+      "detail": "September 9 original incident read and attributed to the earlier cycle; history reviewed for the reported correction."
+    },
+    {
+      "channel": "Original staff posts",
+      "status": "unavailable",
+      "detail": "Earlier direct-X access failure retained. No fresh original read in this reconciliation; conflicting interpretations explicitly recorded."
+    },
+    {
+      "channel": "Other official sources and community",
+      "status": "partial",
+      "detail": "Prior source timestamps retained. This reconciliation does not claim a full fresh Help Center, release-note, Reddit or staff sweep."
+    }
+  ],
+  "sources": [
+    {
+      "id": "banked-help",
+      "title": "How banked Codex resets work",
+      "url": "https://help.openai.com/en/articles/20001498-how-banked-codex-resets-work",
+      "tier": "OFFICIAL",
+      "access": "read",
+      "checkedAt": "2026-09-19T11:53:05Z",
+      "note": "Defines saved versus automatic resets and documents past promotional offers. Future offers are not guaranteed."
+    },
+    {
+      "id": "astra-help",
+      "title": "Managing usage with GPT-6 Astra",
+      "url": "https://help.openai.com/en/articles/20001516-managing-usage-with-gpt-6-astra-in-work-and-codex",
+      "tier": "OFFICIAL",
+      "access": "read",
+      "checkedAt": "2026-09-19T11:23:32Z",
+      "note": "Separates Astra launch offers, ordinary usage windows and purchased instant resets. Account eligibility is offer-specific."
+    },
+    {
+      "id": "status",
+      "title": "OpenAI Status",
+      "url": "https://status.openai.com/",
+      "tier": "OFFICIAL",
+      "access": "read",
+      "checkedAt": "2026-09-19T11:23:32Z",
+      "note": "The status page reported fully operational at this check. Service health is not a promise about promotional resets."
+    },
+    {
+      "id": "changelog",
+      "title": "Codex changelog",
+      "url": "https://learn.chatgpt.com/docs/changelog",
+      "tier": "OFFICIAL",
+      "access": "read",
+      "checkedAt": "2026-09-19T11:23:32Z",
+      "note": "The Codex changelog redirected here. Page retrieved; this first pass does not claim a complete historical review."
+    },
+    {
+      "id": "tibo-sep12",
+      "title": "Tibo \u00b7 September 12 lead",
+      "url": "https://x.com/thsottiaux/status/2098685367058612394",
+      "tier": "STAFF",
+      "access": "unavailable",
+      "checkedAt": "2026-09-19T11:53:05Z",
+      "note": "Original link retained from previous research. Current independent access is unavailable; the earlier reported finding remains visible with its provenance.",
+      "provenance": "imported-research",
+      "importNote": "Earlier Reset Watch reports described direct staff-source verification. Imported on 2026-09-19. The transcript is research provenance, not a replacement for the original post."
+    },
+    {
+      "id": "vb-sep12",
+      "title": "VB \u00b7 September 12 lead",
+      "url": "https://x.com/reach_vb/status/2098671081632440549",
+      "tier": "STAFF",
+      "access": "unavailable",
+      "checkedAt": "2026-09-19T11:23:32Z",
+      "note": "Original link retained from previous research. Current independent access is unavailable; the earlier reported finding remains visible with its provenance.",
+      "provenance": "imported-research",
+      "importNote": "Earlier Reset Watch reports described direct staff-source verification. Imported on 2026-09-19. The transcript is research provenance, not a replacement for the original post."
+    },
+    {
+      "id": "reddit-quota",
+      "title": "Reddit \u00b7 reported quota behaviour after a banked reset",
+      "url": "https://www.reddit.com/r/codex/comments/1wimxpz/banked_reset_on_20x_pro_seems_to_restore_only_a/",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T11:23:32Z",
+      "note": "A user reports faster quota consumption after redeeming a reset. Search snippets and the fetched page differed on the update; no diagnosis or new promotional rollout is inferred."
+    },
+    {
+      "id": "forum-history",
+      "title": "Developer Community \u00b7 historical reset discussion",
+      "url": "https://community.openai.com/t/codex-rate-limits-reset-for-all-paid-plans-on-august-9-and-again-on-monday/1389643",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T11:23:32Z",
+      "note": "A historical discussion provides discovery leads. It is not used here to establish new offers or personal eligibility."
+    },
+    {
+      "id": "tibo-announcement",
+      "title": "Tibo \u00b7 original September 12 announcement",
+      "url": "https://x.com/thsottiaux/status/2098612714704891959",
+      "tier": "STAFF",
+      "access": "unavailable",
+      "checkedAt": "2026-09-19T11:53:05Z",
+      "note": "Original announcement link supplied in the earlier research history; not independently reread in this pass.",
+      "provenance": "imported-research",
+      "importNote": "Imported from the previous Reset Watch report, which described a forthcoming reset for Astra users."
+    },
+    {
+      "id": "later-banked-leads",
+      "title": "ResetCue \u00b7 later banked activity leads",
+      "url": "https://resetcue.com/",
+      "tier": "COMMUNITY",
+      "access": "search-only",
+      "checkedAt": "2026-09-19T11:53:05Z",
+      "note": "Search results mention September 5 banked activity. The original page failed to load. This remains a discovery lead; it does not establish a newer broad banked grant."
+    },
+    {
+      "id": "issue-46343",
+      "title": "GitHub #46343",
+      "url": "https://github.com/openai/codex/issues/46343",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T12:50:54Z",
+      "note": "Original public issue read. User report, not an OpenAI-confirmed defect. Exact publication time is imported from the earlier watch; date and report content checked on the original."
+    },
+    {
+      "id": "issue-46352",
+      "title": "GitHub #46352",
+      "url": "https://github.com/openai/codex/issues/46352",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T12:50:54Z",
+      "note": "Original public issue read. User report, not an OpenAI-confirmed defect. Exact publication time is imported from the earlier watch; date and report content checked on the original."
+    },
+    {
+      "id": "issue-46353",
+      "title": "GitHub #46353",
+      "url": "https://github.com/openai/codex/issues/46353",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T12:50:54Z",
+      "note": "Original public issue read. User report, not an OpenAI-confirmed defect. Exact publication time is imported from the earlier watch; date and report content checked on the original."
+    },
+    {
+      "id": "issue-46395",
+      "title": "GitHub #46395",
+      "url": "https://github.com/openai/codex/issues/46395",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T12:50:54Z",
+      "note": "Original public issue read. User report, not an OpenAI-confirmed defect. Exact publication time is imported from the earlier watch; date and report content checked on the original."
+    },
+    {
+      "id": "issue-46439",
+      "title": "GitHub #46439",
+      "url": "https://github.com/openai/codex/issues/46439",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T12:50:54Z",
+      "note": "Original public issue read. User report, not an OpenAI-confirmed defect. Exact publication time is imported from the earlier watch; date and report content checked on the original."
+    },
+    {
+      "id": "issue-46423",
+      "title": "GitHub #46423",
+      "url": "https://github.com/openai/codex/issues/46423",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T12:50:54Z",
+      "note": "Original public issue read. User report, not an OpenAI-confirmed defect. Exact publication time is imported from the earlier watch; date and report content checked on the original."
+    },
+    {
+      "id": "issue-46563",
+      "title": "GitHub #46563",
+      "url": "https://github.com/openai/codex/issues/46563",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T12:50:54Z",
+      "note": "Original public issue read. User report, not an OpenAI-confirmed defect. Exact publication time is imported from the earlier watch; date and report content checked on the original."
+    },
+    {
+      "id": "issue-46608",
+      "title": "GitHub #46608",
+      "url": "https://github.com/openai/codex/issues/46608",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T12:50:54Z",
+      "note": "Original public issue read. User report, not an OpenAI-confirmed defect. Exact publication time is imported from the earlier watch; date and report content checked on the original."
+    },
+    {
+      "id": "tibo-sep19-banked-intent",
+      "title": "Tibo \u00b7 September 19 ambiguous comment (corrected)",
+      "url": "https://x.com/thsottiaux/status/2101352781219258527",
+      "tier": "STAFF",
+      "access": "unavailable",
+      "checkedAt": "2026-09-19T20:57:09Z",
+      "note": "Prior direct X access failed. Reset Watch has retracted the banked-intention interpretation. Reset type, scope and whether the comment refers to a reset are unverified.",
+      "provenance": "imported-research",
+      "importNote": "Owner supplied the Reset Watch correction received September 20 at 00:53 CEST. It supersedes the earlier intention claim. Original text and archive timestamp were not independently reverified in this correction."
+    },
+    {
+      "id": "sep19-archive",
+      "title": "Reset Beacon \u00b7 archived September 19 reply",
+      "url": "https://resetbeacon.com/evidence/449405b8-d553-49de-9740-c126517ae642/",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-19T20:57:09Z",
+      "note": "Third-party archive links the original post and displays September 19 at 09:48 Pacific. Its short archived text and classification do not independently establish the complete parent context, a reset delivery or a Tuesday deadline."
+    },
+    {
+      "id": "issue-46747",
+      "title": "GitHub #46747 \u00b7 context overhead",
+      "url": "https://github.com/openai/codex/issues/46747",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-20T06:11:38Z",
+      "note": "Original user report read; token figures are reported session telemetry, not independently reproduced billing evidence. Exact publication time is imported."
+    },
+    {
+      "id": "issue-46761",
+      "title": "GitHub #46761 \u00b7 image replay, watch-only",
+      "url": "https://github.com/openai/codex/issues/46761",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-20T06:11:38Z",
+      "note": "Original report read. Request-body sizes are not billed tokens; excluded from the strict usage-case count. Exact publication time is imported."
+    },
+    {
+      "id": "pr-46749",
+      "title": "Codex PR #46749 \u00b7 retained usage display",
+      "url": "https://github.com/openai/codex/pull/46749",
+      "tier": "COMMUNITY",
+      "access": "read",
+      "checkedAt": "2026-09-20T06:11:38Z",
+      "note": "Primary repository artifact read: merged code change refreshes retained usage after prompt reverts. Bot-authored repository metadata is not a verified human STAFF statement or backend-accounting diagnosis."
+    },
+    {
+      "id": "status-sep9",
+      "title": "OpenAI Status \u00b7 September 9 unexpected usage resets",
+      "url": "https://status.openai.com/incidents/01M23KG62KKK448RN434CQ64Z8",
+      "tier": "OFFICIAL",
+      "access": "read",
+      "checkedAt": "2026-09-20T06:11:38Z",
+      "note": "Original resolved incident read. Some Codex users experienced unexpected usage-limit resets. This belongs to the earlier September cycle, not the current cycle; no compensation policy is inferred."
+    }
+  ],
+  "events": [
+    {
+      "id": "banked-2026-09-03",
+      "kind": "banked",
+      "title": "Astra launch banked reset",
+      "date": "2026-09-03",
+      "announcement": {
+        "status": "confirmed",
+        "detail": "The offer is documented retrospectively; the original announcement time is not established.",
+        "sourceIds": [
+          "banked-help"
+        ]
+      },
+      "scope": {
+        "status": "confirmed",
+        "detail": "Eligible Plus, Pro and Business subscribers; new accounts/seats needed to qualify before 10 p.m. PT that day. Region and account conditions apply.",
+        "sourceIds": [
+          "astra-help"
+        ]
+      },
+      "timing": {
+        "status": "confirmed",
+        "detail": "September 3, 2026 is documented. Exact delivery time is unknown.",
+        "sourceIds": [
+          "banked-help"
+        ]
+      },
+      "rollout": {
+        "status": "confirmed",
+        "detail": "OpenAI says eligible subscribers received the offer. This does not verify every individual account.",
+        "sourceIds": [
+          "astra-help"
+        ]
+      }
+    },
+    {
+      "id": "banked-2026-09-04",
+      "kind": "banked",
+      "title": "Astra launch banked reset",
+      "date": "2026-09-04",
+      "announcement": {
+        "status": "confirmed",
+        "detail": "The offer is documented retrospectively; the original announcement time is not established.",
+        "sourceIds": [
+          "banked-help"
+        ]
+      },
+      "scope": {
+        "status": "confirmed",
+        "detail": "Eligible Plus, Pro and Business subscribers; new accounts/seats needed to qualify before 8 p.m. PT that day. Region and account conditions apply.",
+        "sourceIds": [
+          "astra-help"
+        ]
+      },
+      "timing": {
+        "status": "confirmed",
+        "detail": "September 4, 2026 is documented. Exact delivery time is unknown.",
+        "sourceIds": [
+          "banked-help"
+        ]
+      },
+      "rollout": {
+        "status": "confirmed",
+        "detail": "OpenAI says eligible subscribers received the offer. This does not verify every individual account.",
+        "sourceIds": [
+          "astra-help"
+        ]
+      }
+    },
+    {
+      "id": "reset-2026-09-07",
+      "kind": "reset",
+      "title": "Documented global automatic reset",
+      "date": "2026-09-07",
+      "announcement": {
+        "status": "confirmed",
+        "detail": "Official documentation records this automatic reset retrospectively.",
+        "sourceIds": [
+          "banked-help"
+        ]
+      },
+      "scope": {
+        "status": "confirmed",
+        "detail": "Eligible Plus, Pro and Business usage limits.",
+        "sourceIds": [
+          "astra-help"
+        ]
+      },
+      "timing": {
+        "status": "confirmed",
+        "detail": "September 7, 2026; no exact delivery time established here.",
+        "sourceIds": [
+          "banked-help"
+        ]
+      },
+      "rollout": {
+        "status": "confirmed",
+        "detail": "OpenAI states that limits were refreshed; no saved reset was added.",
+        "sourceIds": [
+          "astra-help"
+        ]
+      }
+    },
+    {
+      "id": "reset-2026-09-12-lead",
+      "kind": "reset",
+      "title": "September 12 automatic reset \u00b7 previous research",
+      "date": "2026-09-12",
+      "announcement": {
+        "status": "imported",
+        "detail": "Earlier research records Tibo announcing a reset for Astra users. Original announcement retained for follow-up.",
+        "sourceIds": [
+          "tibo-announcement"
+        ]
+      },
+      "scope": {
+        "status": "imported",
+        "detail": "Earlier research attributes broad Codex and ChatGPT Work scope to VB. Product scope must not be rewritten as an explicit Plus / Pro / Business plan list.",
+        "sourceIds": [
+          "vb-sep12"
+        ]
+      },
+      "timing": {
+        "status": "imported",
+        "detail": "The prior report places rollout on September 12, with staff progress and completion messages that morning. Exact post times are not independently verified here.",
+        "sourceIds": [
+          "vb-sep12",
+          "tibo-sep12"
+        ]
+      },
+      "rollout": {
+        "status": "imported",
+        "detail": "Earlier research records Tibo reporting completed propagation, followed by a further VB completion statement. This is retained historical research, not a fresh verification of every account.",
+        "sourceIds": [
+          "tibo-sep12",
+          "vb-sep12"
+        ]
+      }
+    }
+  ],
+  "forecasts": [],
+  "analysis": {
+    "outlooks": [
+      {
+        "kind": "reset",
+        "level": "HIGH",
+        "trend": "strengthening",
+        "confidence": "low",
+        "asOf": "2026-09-19T11:20:00Z",
+        "provenance": "imported",
+        "reason": "The previous watch strengthened its HIGH assessment using usage reports and a long reset interval. This remains an imported judgement; the predictive relationship has not been established.",
+        "support": [
+          "Multiple original community reports document distinct usage-related symptoms.",
+          "The imported historical comparison places this cycle among longer waits."
+        ],
+        "against": [
+          "The full imported ledger is not reconstructed and reports may share causes.",
+          "Bugs and elapsed time do not establish a future reset or entitlement."
+        ],
+        "missing": "A directly verified reset announcement, explicit staff compensation hint or documented offer scope would materially improve the assessment.",
+        "sourceIds": [
+          "banked-help",
+          "issue-46563",
+          "issue-46608"
+        ]
+      },
+      {
+        "kind": "banked",
+        "level": "ELEVATED",
+        "trend": "weakening",
+        "confidence": "low",
+        "asOf": "2026-09-20T06:02:02Z",
+        "provenance": "reviewed",
+        "reason": "Extra weight assigned to the September 19 comment is withdrawn. This level retains only the older speculative baseline, not a new staff reset promise.",
+        "support": [
+          "Older imported usage-watch analysis remains a speculative baseline."
+        ],
+        "against": [
+          "The original watch retracted its banked-intention interpretation.",
+          "Reset type, scope and even the subject of the comment remain unverified.",
+          "No verified delivery or Tuesday reset deadline.",
+          "The second watch rates the same hint HIGH; the first retracted the intention interpretation. We do not count this disagreement as corroboration."
+        ],
+        "missing": "An explicit reset announcement and separate scope and rollout evidence.",
+        "sourceIds": [
+          "tibo-sep19-banked-intent",
+          "sep19-archive"
+        ]
+      },
+      {
+        "kind": "any",
+        "level": "HIGH",
+        "trend": "weakening",
+        "confidence": "low",
+        "asOf": "2026-09-20T06:02:02Z",
+        "provenance": "reviewed",
+        "reason": "Extra weight assigned to the September 19 comment is withdrawn. This level retains only the older speculative baseline, not a new staff reset promise.",
+        "support": [
+          "Older imported usage-watch analysis remains a speculative baseline."
+        ],
+        "against": [
+          "The original watch retracted its banked-intention interpretation.",
+          "Reset type, scope and even the subject of the comment remain unverified.",
+          "No verified delivery or Tuesday reset deadline."
+        ],
+        "missing": "An explicit reset announcement and separate scope and rollout evidence.",
+        "sourceIds": [
+          "tibo-sep19-banked-intent",
+          "sep19-archive"
+        ]
+      }
+    ],
+    "incidents": [
+      {
+        "id": "46343",
+        "title": "Repeated agent work consumed a large allowance",
+        "category": "subagent/fan-out",
+        "cluster": "Repeated agent work",
+        "reporter": "anarchylimes",
+        "environment": "Agent harness; CLI not isolated",
+        "reportedAt": "2026-09-18T02:16:00Z",
+        "checkedAt": "2026-09-19T12:50:54Z",
+        "sourceId": "issue-46343",
+        "review": "reviewed",
+        "status": "Open in the reviewed page; no independent reproduction",
+        "evidence": "Reporter describes roughly 42% weekly usage for a scoped task, repeated enumeration and no-op delegation.",
+        "limitation": "Self-reported usage; independent root cause and compensation eligibility are not established."
+      },
+      {
+        "id": "46352",
+        "title": "Reset notification shows a different timezone",
+        "category": "reset/banked",
+        "cluster": "Reset presentation",
+        "reporter": "apiloian",
+        "environment": "macOS Desktop",
+        "reportedAt": "2026-09-18T02:46:00Z",
+        "checkedAt": "2026-09-19T12:50:54Z",
+        "sourceId": "issue-46352",
+        "review": "reviewed",
+        "status": "Open in the reviewed page; no independent reproduction",
+        "evidence": "The report compares the notification time with Settings and mobile, which display a different reset time.",
+        "limitation": "A display discrepancy does not demonstrate failed quota restoration."
+      },
+      {
+        "id": "46353",
+        "title": "Goal compaction exceeded an input-item limit",
+        "category": "compaction/cache/context",
+        "cluster": "Context handling",
+        "reporter": "yydspanda",
+        "environment": "CLI 0.155.0; WSL2; Astra Ultra",
+        "reportedAt": "2026-09-18T02:54:00Z",
+        "checkedAt": "2026-09-19T12:50:54Z",
+        "sourceId": "issue-46353",
+        "review": "reviewed",
+        "status": "Open in the reviewed page; no independent reproduction",
+        "evidence": "The report includes an array-length error during a long review-to-goal session and describes a subsequent wait.",
+        "limitation": "The structural error is documented by the reporter; the additional usage cost and later internal state are not measured here."
+      },
+      {
+        "id": "46395",
+        "title": "Status command was sent to the model",
+        "category": "other usage-related",
+        "cluster": "Command dispatch",
+        "reporter": "andy-lee-cat",
+        "environment": "CLI 0.153.2; macOS; Astra",
+        "reportedAt": "2026-09-18T09:12:00Z",
+        "checkedAt": "2026-09-19T12:50:54Z",
+        "sourceId": "issue-46395",
+        "review": "reviewed",
+        "status": "Open in the reviewed page; no independent reproduction",
+        "evidence": "A command intended to inspect Fast mode reportedly became a normal model turn with file reads.",
+        "limitation": "A current-version source fix has not been independently reviewed here."
+      },
+      {
+        "id": "46439",
+        "title": "Usage display and later enforcement disagree",
+        "category": "reset/banked",
+        "cluster": "Reset enforcement",
+        "reporter": "nbecker",
+        "environment": "CLI 0.153.2; Linux; Plus; Astra",
+        "reportedAt": "2026-09-18T14:16:00Z",
+        "checkedAt": "2026-09-19T12:50:54Z",
+        "sourceId": "issue-46439",
+        "review": "reviewed",
+        "status": "Open in the reviewed page; no independent reproduction",
+        "evidence": "Reporter says both windows appeared restored after a manual reset, followed shortly by a five-hour limit.",
+        "limitation": "Reset type is unspecified. The uploaded private trace was not inspected; cause remains unresolved."
+      },
+      {
+        "id": "46423",
+        "title": "Trivial commands repeated after reconnects",
+        "category": "compaction/cache/context",
+        "cluster": "Context handling",
+        "reporter": "Berenice-co",
+        "environment": "Windows Desktop 26.915.31029",
+        "reportedAt": "2026-09-18T12:23:00Z",
+        "checkedAt": "2026-09-19T12:50:54Z",
+        "sourceId": "issue-46423",
+        "review": "reviewed",
+        "status": "Open in the reviewed page; no independent reproduction",
+        "evidence": "The report describes a fresh workspace, repeated successful tool calls, compaction and timeouts.",
+        "limitation": "Repeated work is described, but no independent quota-cost measurement was established here."
+      },
+      {
+        "id": "46563",
+        "title": "Background summaries launched repeatedly",
+        "category": "background/automation",
+        "cluster": "Background scheduling",
+        "reporter": "kwokpia",
+        "environment": "macOS Desktop; two machines",
+        "reportedAt": "2026-09-19T01:40:00Z",
+        "checkedAt": "2026-09-19T12:50:54Z",
+        "sourceId": "issue-46563",
+        "review": "reviewed",
+        "status": "Open in the reviewed page; no independent reproduction",
+        "evidence": "Reporter provides session counts, logs and model-level usage comparisons, describing background launches after out-of-credits errors.",
+        "limitation": "Telemetry is supplied by the reporter; no independent reproduction or generalization to other platforms is claimed."
+      },
+      {
+        "id": "46608",
+        "title": "Credit deductions and recharge need reconciliation",
+        "category": "accounting/meter",
+        "cluster": "Credit reconciliation",
+        "reporter": "bthurlerm-lgtm",
+        "environment": "Work / Codex / Astra",
+        "reportedAt": "2026-09-19T08:14:00Z",
+        "checkedAt": "2026-09-19T12:50:54Z",
+        "sourceId": "issue-46608",
+        "review": "reviewed",
+        "status": "Open in the reviewed page; no independent reproduction",
+        "evidence": "Reporter describes an unexplained recharge amount and missing execution-level reconciliation for credit deductions.",
+        "limitation": "Support statements are relayed by the user. No direct staff confirmation or proven reconnect cause is present in the reviewed report."
+      },
+      {
+        "id": "46747",
+        "title": "Small SVG task reports substantial context overhead",
+        "category": "compaction/cache/context",
+        "cluster": "Context handling",
+        "reporter": "chenyuhao0628",
+        "environment": "macOS Codex Desktop, Sol High, CLI 0.155.0-alpha.9.2",
+        "reportedAt": "2026-09-20T02:52:00Z",
+        "checkedAt": "2026-09-20T06:11:38Z",
+        "sourceId": "issue-46747",
+        "review": "reviewed",
+        "status": "Open user report; not independently reproduced",
+        "evidence": "Reporter shows 887,076 input tokens, including 827,264 cached input, and 9,230 output tokens for a small task; unnecessary tool work is alleged.",
+        "limitation": "Telemetry is supplied by the reporter. Does not prove incorrect billing, silent model substitution or independent root cause."
+      },
+      {
+        "id": "46761",
+        "title": "Watch-only: repeated historical image payloads",
+        "category": "compaction/cache/context",
+        "cluster": "Image context replay",
+        "reporter": "oyishyi",
+        "environment": "Windows Desktop runtime 0.155.0-alpha.9",
+        "reportedAt": "2026-09-20T04:39:00Z",
+        "checkedAt": "2026-09-20T06:11:38Z",
+        "sourceId": "issue-46761",
+        "review": "excluded",
+        "status": "Watch-only; outside strict usage counts",
+        "evidence": "Reporter measures 30 retained images and 2.716 GiB of compressed request bodies over 64 requests in 30 minutes.",
+        "limitation": "Bytes are not billed tokens or quota. Measurements date from September 18; independent reproduction and usage impact remain unverified."
+      }
+    ],
+    "importedLedger": {
+      "asOf": "2026-09-20T05:20:00Z",
+      "total": 53,
+      "staffFixes": 5,
+      "officialIncidents": 0,
+      "categories": [
+        {
+          "name": "accounting/meter",
+          "count": 9
+        },
+        {
+          "name": "compaction/cache/context",
+          "count": 6
+        },
+        {
+          "name": "background/automation",
+          "count": 7
+        },
+        {
+          "name": "limit/session/reserve/credits",
+          "count": 10
+        },
+        {
+          "name": "subagent/fan-out",
+          "count": 6
+        },
+        {
+          "name": "reset/banked",
+          "count": 3
+        },
+        {
+          "name": "routing/capacity",
+          "count": 10
+        },
+        {
+          "name": "other usage-related",
+          "count": 2
+        }
+      ],
+      "snapshots": [
+        {
+          "at": "2026-09-18T04:38:00Z",
+          "total": 41
+        },
+        {
+          "at": "2026-09-18T11:15:00Z",
+          "total": 43
+        },
+        {
+          "at": "2026-09-18T16:56:00Z",
+          "total": 45
+        },
+        {
+          "at": "2026-09-19T04:26:00Z",
+          "total": 46
+        },
+        {
+          "at": "2026-09-19T11:20:00Z",
+          "total": 47
+        },
+        {
+          "at": "2026-09-20T05:20:00Z",
+          "total": 53
+        }
+      ],
+      "note": "Imported usage-watch snapshot at 20 September 07:20 CEST: 53 community cases, five mechanisms/fixes, zero official incidents in its current cycle. The full ledger is not independently reconstructed. These totals overlap with the nine reviewed notebook cases and must not be added. The five-fix label is the original watch classification; the newly read bot-authored PR is not independently upgraded to STAFF."
+    },
+    "history": {
+      "asOf": "2026-09-20T05:20:00Z",
+      "ageDays": 7.88,
+      "remainingIntervals": [
+        8.066666666666666,
+        10.989583333333334
+      ],
+      "comparisons": [
+        {
+          "hours": 24,
+          "hits": 1,
+          "sample": 2
+        },
+        {
+          "hours": 48,
+          "hits": 1,
+          "sample": 2
+        },
+        {
+          "hours": 72,
+          "hits": 1,
+          "sample": 2
+        },
+        {
+          "hours": 168,
+          "hits": 2,
+          "sample": 2
+        }
+      ],
+      "note": "Imported September 20 07:20 CEST usage-watch analysis: ten global intervals, median 52.05h, Q1 46.83h, Q3 163.73h, min 29.77h, max 263.75h. This site has not reconstructed all eleven original event anchors. The two longer intervals and displayed ratios are a dated imported comparison, not current calibrated probabilities. A long wait does not make a reset due."
+    },
+    "changes": [
+      {
+        "at": "2026-09-20T06:11:38Z",
+        "title": "Both watches connected; interpretation conflict preserved",
+        "detail": "The usage watch rates banked HIGH from the same September 19 comment that Reset Watch later called ambiguous. These are conflicting interpretations of one post, not independent evidence. Site retains ELEVATED banked with low confidence."
+      },
+      {
+        "at": "2026-09-20T06:11:38Z",
+        "title": "New usage report and watch-only lead reviewed",
+        "detail": "Read #46747 and #46761. Only the first enters the reviewed usage subset. Image request sizes do not establish billed token or quota impact."
+      },
+      {
+        "at": "2026-09-20T06:11:38Z",
+        "title": "Repository fix and historical official incident distinguished",
+        "detail": "PR #46749 refreshes retained usage display after prompt reverts; not proof of backend accounting failure. September 9 official usage-reset incident belongs to the previous cycle."
+      },
+      {
+        "at": "2026-09-20T06:11:38Z",
+        "title": "Imported ledger and historical summary refreshed",
+        "detail": "Imported 53 community cases, five mechanisms/fixes and ten-interval summary from the second watch, with original date and incomplete independent reconstruction clearly retained."
+      },
+      {
+        "at": "2026-09-20T06:02:02Z",
+        "title": "Correction: September 19 removed from reset events",
+        "detail": "The original watch retracts the banked-intention claim. Source retained as an ambiguous hint with community interpretation. Removed the event instead of assigning an unsupported reset type. Banked returns from HIGH to ELEVATED."
+      },
+      {
+        "at": "2026-09-19T20:57:09Z",
+        "title": "Missed September 19 banked signal imported; research handoff strengthened",
+        "detail": "Original Reset Watch now contributes a mandatory recent-findings check on every scheduled run. The banked watch rises from ELEVATED to HIGH with low confidence. No delivered reset or Tuesday deadline is asserted. The incomplete evening review is not relabelled as completed."
+      },
+      {
+        "at": "2026-09-19T12:50:54Z",
+        "title": "Version 4 separates outlook, evidence and historical comparison",
+        "detail": "Removed the fixed 5% / 3% daily assumptions. Three qualitative watch levels retain the dates and provenance of the imported analysis, with confidence, supporting evidence and counterarguments."
+      },
+      {
+        "at": "2026-09-19T12:50:54Z",
+        "title": "Eight original community reports reviewed",
+        "detail": "The notebook reconstructs eight named issues from the supplied watch history. It does not claim to have verified all 47 reports, all four staff fixes, or a complete reset interval dataset."
+      },
+      {
+        "at": "2026-09-19T11:20:00Z",
+        "title": "Previous watch increased its imported total to 47",
+        "detail": "The previous report added the credit-reconciliation case. Its HIGH / ELEVATED outlooks were editorial assessments, not calibrated probabilities."
+      },
+      {
+        "at": "2026-09-19T12:50:54Z",
+        "title": "Excluded leads remain outside the reconstructed count",
+        "detail": "The supplied watch excluded #46615 for no measured usage impact, #46419 for insufficient telemetry and #46344 for uncertain capacity-versus-quota attribution. These exclusions are imported decisions; those originals were not re-reviewed for this release."
+      }
+    ]
+  }
+}
