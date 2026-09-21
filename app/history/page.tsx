@@ -1,0 +1,14 @@
+'use client';
+import {useEffect,useState} from 'react';
+import type {Research} from '@/lib/research';
+import {Button} from '@/components/ui/button';
+import {ExplanationText} from '../update-explanation';
+type Entry={runId:string;checkedAt:string;summary:string};
+const time=(s:string)=>new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Stockholm',dateStyle:'medium',timeStyle:'short'}).format(new Date(s));
+export default function History(){
+ const [rows,setRows]=useState<Entry[]>([]),[next,setNext]=useState<string|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[selected,setSelected]=useState<Research|null>(null);
+ async function load(before?:string){setBusy(true);setError('');try{const response=await fetch('/api/watchdog/history'+(before?'?before='+encodeURIComponent(before):''),{cache:'no-store'});if(!response.ok)throw Error();const data=await response.json();setRows(data.reports);setNext(data.next);setSelected(null);}catch{setError('History could not be loaded. Try the newest reports again.');}finally{setBusy(false);}}
+ async function open(id:string){setBusy(true);setError('');try{const response=await fetch('/api/watchdog/history?report='+encodeURIComponent(id),{cache:'no-store'});if(!response.ok)throw Error();setSelected((await response.json()).research);}catch{setError('This report could not be loaded. It may no longer be retained.');}finally{setBusy(false);}}
+ useEffect(()=>{void load();},[]);
+ return <main><a href="/">← Back to the watchdog</a><section className="research-brief"><h1>Earlier reports</h1><p>Browse the latest 720 saved reports, plus reports linked from retained checks. This is a rolling archive, not a permanent record. Times use Stockholm time. Important corrections remain in the current research.</p><Button disabled={busy} onClick={()=>load()}>Newest reports</Button>{error&&<p role="alert">{error}</p>}{busy&&<p role="status">Loading history…</p>}{rows.map(row=><article className="change-entry" key={row.runId}><h2>{time(row.checkedAt)}</h2><p>{row.summary}</p><Button variant="outline" disabled={busy} onClick={()=>open(row.runId)}>Read this report’s changes</Button></article>)}{next&&<Button disabled={busy} onClick={()=>load(next)}>Older reports</Button>}</section>{selected&&<section className="research-brief" aria-label="Selected report"><h2>Changes recorded {time(selected.checkedAt)}</h2>{selected.analysis?.changes.map((c,i)=><article className="change-entry" key={i}><h3>{c.title}</h3><p>{time(c.at)}</p><ExplanationText text={c.detail}/></article>)}<a href={'/api/watchdog/history?report='+encodeURIComponent(selected.runId)}>Full saved report</a></section>}</main>;
+}

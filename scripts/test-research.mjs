@@ -4,9 +4,8 @@ import vm from 'node:vm';
 import ts from 'typescript';
 import {researchSchema} from '../lib/research.ts';
 const report=JSON.parse(fs.readFileSync('research/latest.json','utf8'));
-// Keep publication tests independent of the age of the bundled research snapshot.
-report.checkedAt=new Date().toISOString();
-report.validUntil=new Date(Date.now()+24*60*60*1000).toISOString();
+const testNow=Date.parse(report.checkedAt)+1000;
+class TestDate extends Date { static now(){return testNow;} }
 assert(researchSchema.safeParse(report).success);
 const invalid=structuredClone(report);invalid.sources[0].tier='COMMUNITY';invalid.events[0].announcement.sourceIds=[invalid.sources[0].id];assert(!researchSchema.safeParse(invalid).success,'Community evidence cannot confirm a claim');
 const missing=structuredClone(report);missing.events[0].scope.sourceIds=['not-a-source'];assert(!researchSchema.safeParse(missing).success,'Dangling references rejected');
@@ -14,11 +13,13 @@ const fake=structuredClone(report);fake.sources[0].url='https://openai.com.examp
 const privateData=structuredClone(report);privateData.personalObservation='private';assert(!researchSchema.safeParse(privateData).success,'Unknown fields rejected');
 const code=ts.transpileModule(fs.readFileSync('app/api/watchdog/route.ts','utf8').replace(/^import .*;$/gm,''),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
 const records=new Map();
-const db={prepare(sql){return {bind(...args){return {async first(){const body=records.get(args[0]);return body?{body}:null},sql,args}}}},async batch(statements){const [archive,latest]=statements;const [id,body]=archive.args;if(!records.has(id))records.set(id,body);const next=records.get(latest.args[1]);const prev=records.get(latest.args[0]);if(!prev||Date.parse(JSON.parse(next).checkedAt)>Date.parse(JSON.parse(prev).checkedAt))records.set(latest.args[0],next);}};
-const context={exports:{},env:{DB:db,WATCHDOG_INGEST_TOKEN:'test-token'},researchSchema,Response,Request,crypto,TextEncoder,TextDecoder,Uint8Array,Date};vm.runInNewContext(code,context);
+const db={prepare(sql){return {async run(){},bind(...args){return {async first(){const body=records.get(args[0]);return body?{body}:null},sql,args}}}},async batch(statements){const [archive,latest]=statements;const [id,body]=archive.args;if(!records.has(id))records.set(id,body);const next=records.get(latest.args[1]);const prev=records.get(latest.args[0]);if(!prev||Date.parse(JSON.parse(next).checkedAt)>Date.parse(JSON.parse(prev).checkedAt))records.set(latest.args[0],next);}};
+const context={exports:{},env:{DB:db,WATCHDOG_INGEST_TOKEN:'test-token'},researchSchema,Response,Request,crypto,TextEncoder,TextDecoder,Uint8Array,Date:TestDate};vm.runInNewContext(code,context);
 const req=(r,auth='Bearer test-token')=>new Request('http://localhost/api/watchdog',{method:'POST',headers:{Authorization:auth},body:JSON.stringify(r)});
 assert.equal((await context.exports.POST(req(report,'wrong'))).status,401);
 assert.equal((await context.exports.POST(req(missing))).status,400);
+const expired=structuredClone(report);expired.checkedAt=new Date(testNow-7200000).toISOString();expired.validUntil=new Date(testNow-1).toISOString();
+const rejected=await context.exports.POST(req(expired));assert.equal(rejected.status,400);assert.equal((await rejected.json()).error,'Report already expired');assert.equal(records.size,0,'Expired reports cannot write storage');
 assert.equal((await context.exports.POST(req(report))).status,200);
 assert.equal((await context.exports.POST(req(report))).status,200,'Identical retry is idempotent');
 assert.equal((await context.exports.GET()).status,200);

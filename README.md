@@ -23,6 +23,8 @@ Open the loopback URL printed by the development server (normally http://localho
 node --experimental-strip-types scripts/validate-research.mjs research/latest.json
 node --experimental-strip-types scripts/test-research.mjs
 node --experimental-strip-types scripts/test-monitor.mjs
+node --experimental-strip-types scripts/test-publication.mjs
+WATCHDOG_SITE_URL=https://example.invalid python3 scripts/test-publication-recovery.py
 npm run build
 ```
 
@@ -36,14 +38,19 @@ Configure your own `WATCHDOG_INGEST_TOKEN` server secret. Store the matching tok
 
 ```sh
 export WATCHDOG_SITE_URL=https://your-own-site.example
-python3 scripts/submit-research.py research/latest.json
+# Save your current public /api/watchdog response as live-baseline.json first.
+python3 scripts/prepare-research.py candidate.json live-baseline.json prepared-report.json
+node --experimental-strip-types scripts/validate-research.mjs prepared-report.json
+python3 scripts/submit-research.py prepared-report.json live-baseline.json
 ```
 
 Review and update the report first: the server rejects expired reports, malformed payloads, and older reports that would overwrite newer research. The helpers verify readback. Do not submit the bundled historical snapshot as fresh research.
 
 ## Research and monitoring
 
-See [research/WORKFLOW.md](research/WORKFLOW.md) for the research process. The website displays run status; it does not schedule or perform research by itself. The original owner's Codex automations, private tasks, credentials, database contents, and local execution history are not included. Configure your own research runner if desired. The current status model expects hourly checks in Europe/Stockholm, with full reviews at 09:00 and 21:00.
+See [research/WORKFLOW.md](research/WORKFLOW.md) for the research process. The website displays run status; it does not schedule or perform research by itself. The original owner's Codex automations, private tasks, credentials, database contents, and local execution history are not included. Configure your own research runner if desired. The current status model expects hourly checks in Europe/Stockholm, with full reviews at 07:00 and 19:00.
+
+The latest update is explained next to the AltoTrail panel using the same report text as the change log and archive. The research workflow requires plain explanations of the evidence, outlook impact and uncertainty.
 
 The original interface and AltoTrail promotional panel are included. Adjust branding for your own fork as needed. This GitHub source release is separate from the live Site; pushing here does not deploy it.
 

@@ -5,9 +5,28 @@ All website content and public run status must be English. Never publish private
 ## Public writing
 Use short, plain English sentences. Keep summaries and change titles easy to scan. Avoid repeating the same warning or finding. Put detailed evidence, caveats and technical terms in source notes and supporting fields shown in expandable sections. Preserve exact source meaning, uncertainty and earlier corrections.
 
+### Explain every published update
+Write each `analysis.changes[].detail` as a short explanation a curious reader can understand without reading earlier reports. The newest entry is shown in full immediately below the AltoTrail advertisement; it remains visible when the advertisement is dismissed. Older entries remain in the existing change log and report archive. Use two to four short paragraphs, separated by blank lines, within the existing 1,800-character limit. Old single-paragraph entries remain supported.
+
+Lead with what changed and its effect on the automatic and banked outlooks. Explain the concrete evidence and why it supports that decision, including why a level stayed unchanged when relevant. Clearly mark interpretation with language such as "our reading" or "this could mean". Close with the important uncertainty or evidence that would change the assessment. Speculation is optional and must have a stated basis; never invent a scenario merely to fill the explanation. Do not require a new reset announcement before considering other evidence, and do not treat missing confirmation as proof that a reset is unlikely.
+
+Distinguish new adverse evidence from a correction to an earlier judgement. Explain a downgrade caused by weaker support as such. A level and the confidence in that level are different. Never turn a longer wait, more reports or an approaching event into a measured probability. Name unavailable originals when they materially limit the conclusion. Do not change assessment dates unless a genuine reassessment took place. A no-change check does not need a new report just to provide commentary.
+
+Example for the September 21 downgrade, preserving its original assessment time:
+
+> We lowered the automatic-reset outlook from HIGH to lower ELEVATED. Banked stays at lower ELEVATED. Confidence in both remains low.
+>
+> The earlier HIGH judgement gave too much weight to the long wait and growing number of usage reports. Those reports deserve attention, but they are not all verified billing errors, and we have not established how reliably they predict another reset.
+>
+> Tibo's September 19 reply is also ambiguous. We cannot safely read it as a reset promise. This change corrects the strength of our earlier judgement; it does not reflect a new negative announcement from OpenAI.
+>
+> Past resets still justify watching closely. Stronger evidence linking the current situation to a new grant could change the outlook. ELEVATED is a cautious judgement, not a calculated probability.
+
+This standalone Site uses English only. Reuse the existing report contract and rendering for this public copy; no forecast engine, extra source of truth or new publishing schedule is introduced.
+
 ## Schedule and run lifecycle
-Temporarily every hour on the hour, Europe/Stockholm, until the operator requests a change. Full research at 09 and 21; other runs are change checks. This replaces the earlier three-hour and four-times-daily schedules. Execution requires the owner's Codex environment; do not promise continuous server monitoring.
-1. Run `python3 scripts/monitor-run.py start full` (or light/recovery) BEFORE research. It publishes running status and recovers a locally unfinished prior run as failed. If this fails, report the monitoring failure and continue safe research; do not claim healthy automation.
+Temporarily every hour on the hour, Europe/Stockholm, until the operator requests a change. Full research at 07 and 19; other runs are change checks. This replaces the earlier three-hour and four-times-daily schedules. Execution requires the owner's Codex environment; do not promise continuous server monitoring.
+1. The monitor command reconciles the exact saved terminal outcome before starting another run. If reconciliation fails, keep the saved outcome and do not start a replacement run. `python3 scripts/monitor-run.py reconcile` retries a saved terminal outcome without starting research. Run `python3 scripts/monitor-run.py start full` (or light/recovery) BEFORE research. It publishes running status and recovers a locally unfinished prior run as failed. If this fails, report the monitoring failure and continue safe research; do not claim healthy automation.
 2. Fetch public /api/watchdog with User-Agent Mozilla/5.0. Read lib/research.ts and use the public report as baseline. Do not overwrite newer reports. The status endpoint /api/watchdog/status independently detects late starts and unfinished runs after 45 minutes.
 3. Review the public sources and research inputs you have configured for your own installation. The original owner's private Codex tasks and message checkpoints are not included. Record unavailable inputs as unavailable coverage, never as 'nothing new'. Do not copy private conversations into reports.
 4. Reconcile configured sources with independent public discovery below. Save unresolved public leads/conflicts in the report's coverage/changes, not just private scratch notes. Advance processed message checkpoints ONLY after verified publication, or after explicitly documenting a no-change comparison. Checkpoints store message IDs and report IDs, never private transcript text.
@@ -27,9 +46,25 @@ Imported ledger totals are snapshots, separate from individually reviewed origin
 Reconstruct historical intervals only from explicit per-event original anchors, reset type, date uncertainty and scope. Until then retain newer aggregate statistics as clearly dated imported analysis, not newly verified frequencies. Never interpret tiny survivor samples as calibrated probabilities. Historical official incidents belong to their actual cycle, not the current cycle.
 
 ## Validation and delivery
+Use a saved live baseline, never the checked-in sample as the current report. First merge the candidate with that baseline, retaining important corrections in current source notes and outlook reasons. Prepare the rolling change list with `python3 scripts/prepare-research.py CANDIDATE LIVE_BASELINE PREPARED_REPORT`. This keeps the newest 30 changes and refuses to discard an unpublished change. Older changes remain accessible at /history in retained report snapshots. Never truncate sources, incidents or reset events to bypass validation; report those limits explicitly.
 Run:
-- node --experimental-strip-types scripts/validate-research.mjs research/latest.json
+- node --experimental-strip-types scripts/validate-research.mjs PREPARED_REPORT
 - node --experimental-strip-types scripts/test-research.mjs
-- python3 scripts/submit-research.py research/latest.json
+- python3 scripts/submit-research.py PREPARED_REPORT LIVE_BASELINE
 The publisher reads the ignored secret and verifies exact public equality. Never print/read the credential directly. A 409 requires fetching the newer report and reconciling. Preserve all valid prior history and source check timestamps. A targeted update may refresh report publication time but must not claim a full review of untouched sources.
 After status readback, notify only material findings/corrections, publication or monitoring failure, or required action. Unchanged checks stay quiet. Never purchase credits, consume resets or enable paid reload. Token telemetry is null when unavailable; do not infer per-run usage from account totals.
+
+## Outlook display and movement
+The public page displays automatic and banked outlooks only. Retain the legacy any outlook in stored reports for history and schema compatibility. Each visible outlook may include position (lower, middle, upper) and positionReason together. Assess position explicitly from supporting and opposing evidence; explain every move in analysis.changes. Never move it merely because time passed, more duplicate reports appeared, or a check ran. Keep level, position, confidence and trend distinct. Preserve an unassessed position as absent; never invent a midpoint for older reports.
+
+
+## Mandatory full assessment
+Every full run at 07:00 and 19:00 must explicitly reassess all three stored outlooks. Publish `analysis.review` with `at`, `status` (`complete` or `incomplete`), `considered` (the actual new evidence and unresolved gaps), and `reason` (why levels/positions changed or remained unchanged). A complete review sets every outlook's `asOf` to that review time and `provenance` to `reviewed`, including when levels remain unchanged. Update reasons and supporting/opposing evidence truthfully. Do not advance review dates just because a run started. The review time must be within the run and no later than report publication.
+If assessment cannot be completed, publish an explicit incomplete review with its limitation and retain the last genuinely assessed outlook dates; or finish failed if publication is impossible. A full run cannot finish unchanged. A light update preserves the previous full review metadata unless an actual new full assessment was performed. Research/source coverage and assessment completeness are separate: explain material evidence gaps even in a completed assessment.
+
+## Retention and recovery contract
+The existing report/status handlers own D1 retention, enforced on successful writes with deterministic ordering by checked_at and id. Keep the newest 720 monitor runs and newest 720 report snapshots, plus the current report and snapshots referenced by those retained monitor runs (at most 1441 archived reports plus the latest pointer). Only exact `monitor-run-*` and `research-v2-run-*` key families are eligible; unrelated snapshots are protected. Archive pages contain ten reports and use keyset pagination. Return an explicit unavailable/reload response on storage errors or an expired cursor. This is bounded history, not permanent archival storage. Current source notes and outlook reasons must retain still-relevant corrections regardless of archive expiry.
+The monitor script owns only `.sites-runtime/active-monitor-run.json`, `run-log.jsonl`, `monitor-command.lock`, `run-coverage.json` and their explicitly named temporary replacements. Keep at most 720 log lines and read at most a 16 MB tail during migration. Refuse symlinks, replace files atomically, serialize monitor commands, and never touch unrelated files. The active outcome is retained until exact remote equality is confirmed; three bounded transient-network attempts are allowed, with read-before-retry and no retry on conflicts or permanent errors. A cleanup/log-write failure is an error, not a successful terminal confirmation. A failed database cleanup returns an error even if the report was saved; inspect readback before retrying the same immutable report. No new timer or background process is introduced.
+
+## Public surface
+This standalone Site publishes English only. The assessment summary and history page are client-rendered public explanatory copy; existing metadata and the AltoTrail product's separate locale surfaces are unchanged.
