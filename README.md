@@ -24,6 +24,7 @@ node --experimental-strip-types scripts/validate-research.mjs research/latest.js
 node --experimental-strip-types scripts/test-research.mjs
 node --experimental-strip-types scripts/test-monitor.mjs
 node --experimental-strip-types scripts/test-publication.mjs
+python3 scripts/test-watchdog-usage.py
 WATCHDOG_SITE_URL=https://example.invalid python3 scripts/test-publication-recovery.py
 npm run build
 ```
@@ -57,3 +58,5 @@ The original interface and AltoTrail promotional panel are included. Adjust bran
 ## License
 
 MIT, copyright 2026 Johan Lundgren. See [LICENSE](LICENSE). Bundled third-party notices remain in [build/sites-vite-plugin.LICENSE](build/sites-vite-plugin.LICENSE) and [vendor/shadcn-tailwind-4.13.0.LICENSE.md](vendor/shadcn-tailwind-4.13.0.LICENSE.md); dependencies have their own licenses.
+
+The optional operating-usage experiment counts completed heartbeat runs from your own local Codex telemetry. Configure the ignored `.sites-runtime/usage-config.json` with `automationFile`, `sessionsDirectory` and an ISO UTC `since` timestamp. `monitor-run.py start` collects prior completions; `monitor-run.py usage` collects without starting research. Only aggregate counts and timestamps are published. See the workflow for exclusions, bounded storage and recovery.

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {researchSchema} from '../lib/research.ts';
-import {runSchema,monitoringState,scheduleWindow} from '../lib/monitor.ts';
+import {runSchema,monitoringState,scheduleWindow,usageSchema,usageUpdateSchema} from '../lib/monitor.ts';
 const now=Date.parse('2026-09-20T07:50:00Z');
 const base={runId:'check-test',startedAt:'2026-09-20T07:00:00Z',updatedAt:'2026-09-20T07:01:00Z',mode:'light',status:'running',detail:'Checking',channels:[]};
 assert.equal(monitoringState([base],now).state,'interrupted');
@@ -20,7 +20,7 @@ import ts from 'typescript';
 const code=ts.transpileModule(fs.readFileSync('app/api/watchdog/status/route.ts','utf8').replace(/^import .*;$/gm,''),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
 const records=new Map();
 const DB={prepare(sql){return{async run(){},bind(...args){return{async first(){const body=records.get(args[0]);return body?{body}:null},async run(){const [key,body]=args;const old=records.get(key);const incoming=JSON.parse(body);if(!old||JSON.parse(old).status==='running'&&JSON.parse(old).startedAt===incoming.startedAt&&Date.parse(incoming.updatedAt)>Date.parse(JSON.parse(old).updatedAt))records.set(key,body)}}},async all(){return {results:[...records.entries()].filter(([k])=>k.startsWith('monitor-run-')).map(([,body])=>({body}))}}}}};
-const ctx={exports:{},env:{DB,WATCHDOG_INGEST_TOKEN:'test-only'},researchSchema,runSchema,monitoringState,Response,Request,crypto,TextEncoder,TextDecoder,Uint8Array,Date};vm.runInNewContext(code,ctx);
+const ctx={exports:{},env:{DB,WATCHDOG_INGEST_TOKEN:'test-only'},researchSchema,runSchema,monitoringState,usageSchema,usageUpdateSchema,Response,Request,crypto,TextEncoder,TextDecoder,Uint8Array,Date};vm.runInNewContext(code,ctx);
 const r={...base,startedAt:'2026-09-19T07:00:00Z',updatedAt:'2026-09-19T07:00:00Z'};
 const post=(body,auth='Bearer test-only')=>ctx.exports.POST(new Request('http://test/api/watchdog/status',{method:'POST',headers:{Authorization:auth},body:JSON.stringify(body)}));
 assert.equal((await post(r,'wrong')).status,401);

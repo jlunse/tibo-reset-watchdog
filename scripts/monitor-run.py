@@ -138,7 +138,18 @@ if __name__ == '__main__':
         lock = safe_path(ROOT / '.sites-runtime', 'monitor-command.lock')
         with lock.open('a') as stream:
             fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            run(sys.argv[1:])
+            if sys.argv[1:] == ['usage']:
+                from watchdog_usage import collect
+                collect(ROOT, request)
+            else:
+                run(sys.argv[1:])
+                if sys.argv[1] == 'start':
+                    try:
+                        from watchdog_usage import collect
+                        collect(ROOT, request)
+                    except Exception as error:
+                        # Accounting must never block the research lifecycle.
+                        print('Usage measurement unavailable:', type(error).__name__, file=sys.stderr)
     except Exception as error:
         print('Monitoring publication failed:', type(error).__name__, file=sys.stderr)
         sys.exit(1)

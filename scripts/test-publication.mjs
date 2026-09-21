@@ -4,11 +4,11 @@ import vm from 'node:vm';
 import ts from 'typescript';
 import {DatabaseSync} from 'node:sqlite';
 import {researchSchema} from '../lib/research.ts';
-import {runSchema,monitoringState} from '../lib/monitor.ts';
+import {runSchema,monitoringState,usageSchema,usageUpdateSchema} from '../lib/monitor.ts';
 const sql=new DatabaseSync(':memory:');
 sql.exec('CREATE TABLE snapshots (id TEXT PRIMARY KEY, body TEXT NOT NULL, checked_at TEXT NOT NULL)');
 const db={prepare(query){const make=(args=[])=>({query,args,bind(...values){return make(values)},async first(){return sql.prepare(query).get(...args)??null},async all(){return{results:sql.prepare(query).all(...args)}},async run(){return sql.prepare(query).run(...args)}});return make()},async batch(statements){sql.exec('BEGIN');try{const results=[];for(const s of statements)results.push(await s.run());sql.exec('COMMIT');return results}catch(e){sql.exec('ROLLBACK');throw e}}};
-function route(path){const code=ts.transpileModule(fs.readFileSync(path,'utf8').replace(/^import .*;$/gm,''),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;const c={exports:{},env:{DB:db,WATCHDOG_INGEST_TOKEN:'test-only'},researchSchema,runSchema,monitoringState,Response,Request,URL,crypto,TextEncoder,TextDecoder,Uint8Array,Date};vm.runInNewContext(code,c);return c.exports;}
+function route(path){const code=ts.transpileModule(fs.readFileSync(path,'utf8').replace(/^import .*;$/gm,''),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;const c={exports:{},env:{DB:db,WATCHDOG_INGEST_TOKEN:'test-only'},researchSchema,runSchema,monitoringState,usageSchema,usageUpdateSchema,Response,Request,URL,crypto,TextEncoder,TextDecoder,Uint8Array,Date};vm.runInNewContext(code,c);return c.exports;}
 const reports=route('app/api/watchdog/route.ts'),status=route('app/api/watchdog/status/route.ts'),history=route('app/api/watchdog/history/route.ts');
 const now=Date.now(),stamp=(delta)=>new Date(now+delta).toISOString();
 const report=JSON.parse(fs.readFileSync('research/latest.json'));Object.assign(report,{runId:'test-report-current',checkedAt:stamp(-1000),validUntil:stamp(86400000)});
@@ -59,3 +59,20 @@ assert.equal((await status.POST(request(unfinishedStart))).status,200);
 assert.equal((await reports.POST(request(unfinished,fresh.runId))).status,200);
 assert.equal((await status.POST(request({...unfinishedStart,status:'published',reportId:unfinished.runId,updatedAt:stamp(6000)}))).status,200,'Explicit incomplete assessment is publishable without freshening old outlooks');
 console.log('Passed: actual SQLite publication, baseline conflict, full review gate, terminal replay, retention and archive pagination.');
+
+// Accounting uses the authenticated status owner and one durable aggregate.
+const usage={since:stamp(-50000),through:stamp(-30000),updatedAt:stamp(-20000),measuredRuns:1,unmeasuredRuns:0,inputTokens:100,cachedInputTokens:60,outputTokens:10,totalTokens:110};
+const update={kind:'usage',baselineUpdatedAt:null,usage};
+assert.equal((await status.POST(new Request('https://test/status',{method:'POST',body:JSON.stringify(update)}))).status,401);
+assert.equal((await status.POST(request({...update,usage:{...usage,totalTokens:170}}))).status,400,'Cached tokens cannot be counted twice');
+assert.equal((await status.POST(request(update))).status,200);
+assert.equal((await status.POST(request(update))).status,200,'Identical replay is safe');
+assert.deepEqual((await (await status.GET()).json()).usage,usage);
+const nextUsage={...usage,through:stamp(-10000),updatedAt:stamp(0),measuredRuns:2,inputTokens:200,cachedInputTokens:120,outputTokens:20,totalTokens:220};
+assert.equal((await status.POST(request({kind:'usage',baselineUpdatedAt:null,usage:nextUsage}))).status,409);
+assert.equal((await status.POST(request({kind:'usage',baselineUpdatedAt:usage.updatedAt,usage:nextUsage}))).status,200);
+assert.equal((await status.POST(request({kind:'usage',baselineUpdatedAt:nextUsage.updatedAt,usage:{...nextUsage,through:stamp(1000),updatedAt:stamp(2000),measuredRuns:1}}))).status,409,'Totals cannot regress');
+assert.equal((await reports.POST(request({...fresh,runId:'test-usage-retention',checkedAt:stamp(8000)},unfinished.runId))).status,200);
+assert.deepEqual((await (await status.GET()).json()).usage,nextUsage,'Report retention preserves the usage singleton');
+assert.equal(sql.prepare("SELECT COUNT(*) AS n FROM snapshots WHERE id='watchdog-usage-total'").get().n,1);
+console.log('Passed: usage authentication, strict totals, baseline conflicts, replay and retention.');
