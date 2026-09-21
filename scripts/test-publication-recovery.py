@@ -1,4 +1,4 @@
-import contextlib, importlib.util, io, json, pathlib, tempfile, unittest, urllib.error
+import copy, contextlib, importlib.util, io, json, pathlib, subprocess, sys, tempfile, unittest, urllib.error
 ROOT = pathlib.Path(__file__).resolve().parent
 
 def module(name):
@@ -22,6 +22,65 @@ class RecoveryTests(unittest.TestCase):
             prepare.prepare({'analysis': {'changes': [new]}}, base)
         with self.assertRaises(ValueError):
             prepare.prepare({'analysis': {'changes': old + [{**new, 'at': '2025-01-01T00:00:00Z'}]}}, base)
+
+    def staff_candidate(self):
+        before, after = '2026-09-21T17:04:14Z', '2026-09-21T18:02:50Z'
+        base = {'checkedAt': before, 'sources': [], 'analysis': {'changes': [], 'outlooks': [
+            {'kind': kind, 'asOf': before, 'sourceIds': []} for kind in ('reset', 'banked', 'any')]}}
+        candidate = copy.deepcopy(base)
+        candidate['checkedAt'] = after
+        candidate['sources'] = [{'id': 'timing-hint', 'url': 'https://x.com/thsottiaux/status/2101920928070562029',
+            'tier': 'COMMUNITY', 'access': 'unavailable', 'note': '3am on a tuesday', 'checkedAt': after}]
+        candidate['analysis']['changes'] = [{'at': after, 'title': 'Timing hint', 'detail': 'Pending context.'}]
+        return base, candidate
+
+    def test_imported_staff_hint_cannot_leave_outlooks_stale(self):
+        base, candidate = self.staff_candidate()
+        with self.assertRaisesRegex(ValueError, 'fresh, source-linked'):
+            prepare.prepare(candidate, base)
+        for outlook in candidate['analysis']['outlooks']:
+            outlook.update(asOf=candidate['checkedAt'], sourceIds=['timing-hint'])
+        self.assertEqual(prepare.prepare(candidate, base), candidate)
+        candidate['analysis']['outlooks'][0]['sourceIds'] = []
+        with self.assertRaises(ValueError): prepare.prepare(candidate, base)
+
+    def test_changed_staff_context_requires_reassessment_but_recheck_does_not(self):
+        base, candidate = self.staff_candidate()
+        base['sources'] = copy.deepcopy(candidate['sources'])
+        base['sources'][0]['checkedAt'] = base['checkedAt']
+        self.assertEqual(prepare.prepare(candidate, base), candidate)
+        candidate['sources'][0]['note'] = 'Context now explicitly mentions a grant.'
+        with self.assertRaises(ValueError): prepare.prepare(candidate, base)
+
+    def test_incomplete_staff_assessment_preserves_pending_signal(self):
+        base, candidate = self.staff_candidate()
+        candidate['analysis']['review'] = {'at': candidate['checkedAt'], 'status': 'incomplete',
+            'considered': ['timing-hint remains pending'], 'reason': 'Assessment interrupted.'}
+        self.assertEqual(prepare.prepare(candidate, base), candidate)
+        candidate['analysis']['review']['considered'] = ['Something else']
+        with self.assertRaises(ValueError): prepare.prepare(candidate, base)
+
+    def test_staff_guard_requires_public_explanation_and_handles_other_account(self):
+        base, candidate = self.staff_candidate()
+        candidate['sources'][0]['url'] = 'https://twitter.com/reach_vb/status/123?ref=copy'
+        for outlook in candidate['analysis']['outlooks']:
+            outlook.update(asOf=candidate['checkedAt'], sourceIds=['timing-hint'])
+        self.assertEqual(prepare.prepare(candidate, base), candidate)
+        candidate['analysis']['changes'] = []
+        with self.assertRaisesRegex(ValueError, 'public update'): prepare.prepare(candidate, base)
+
+    def test_publisher_rejects_unassessed_hint_before_network_or_credential_read(self):
+        base, candidate = self.staff_candidate()
+        base['runId'] = 'prior-report'
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            (root/'candidate.json').write_text(json.dumps(candidate))
+            (root/'baseline.json').write_text(json.dumps(base))
+            result = subprocess.run([sys.executable, str(ROOT/'submit-research.py'),
+                str(root/'candidate.json'), str(root/'baseline.json')], capture_output=True, text=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('fresh, source-linked', result.stderr)
+            self.assertNotIn('Publish failed', result.stderr)
 
     def test_lost_post_response_is_read_back_not_reposted(self):
         saved, posts = [], []
@@ -78,3 +137,4 @@ class RecoveryTests(unittest.TestCase):
             self.assertEqual(unrelated.read_text(),'keep')
 
 if __name__=='__main__': unittest.main()
+
