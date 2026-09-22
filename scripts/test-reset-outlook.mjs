@@ -12,7 +12,7 @@ function component(file){
 }
 const {AnalysisPanel}=component('app/analysis-panel.tsx');
 const legacy=JSON.parse(fs.readFileSync('research/latest.json'));
-for(const version of [4,5])for(const [level,position,filled] of [['HIGH','upper',9],['VERY HIGH','lower',10]]){
+for(const version of [4,5])for(const [level,position,filled] of [['LOW','lower',1],['HIGH','upper',9],['VERY HIGH','lower',10]]){
  const report=structuredClone(legacy);report.schemaVersion=version;
  const combined=report.analysis.outlooks.find(o=>o.kind==='any');
  combined.level=level;combined.position=position;combined.positionReason='Direct staff promise.';

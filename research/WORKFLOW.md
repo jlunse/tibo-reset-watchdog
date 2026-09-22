@@ -177,6 +177,89 @@ The public explanation is English only, in the shared page component and the
 existing outlook details. Metadata does not describe level thresholds and stays
 unchanged. No schema, storage owner, schedule or new forecast engine is introduced.
 
+## After a delivered reset: assess the next one
+Apply this within the existing report and hourly research process, as soon as
+delivery is verified. Do not wait for a scheduled full review, a guessed clock
+time, a cooldown, or the passage of a fixed number of hours. This changes the
+subject of the forecast from the fulfilled grant to the next possible extra grant;
+it does not erase research or start another service, schedule or stored cycle.
+
+### Verify completion and match the grant
+- Require a directly read OFFICIAL or STAFF source confirming delivery of the
+  relevant extra grant. An announcement, one account report, an ordinary window
+  reset or an unverified mirror is insufficient. Distinguish rollout started from
+  the promised grant being delivered for its stated eligible scope; do not require
+  delivery to every account when the grant itself has a narrower scope.
+- Match the delivery to the existing promise/event and its source links. Continued
+  rollout, additional recipients and later redemption of the same saved grant are
+  updates to that event, not additional grants or reasons to restart again.
+- Update the existing event ID when one already represents the grant. Record
+  announcement, eligibility, timing and rollout as separate claims with their own
+  evidence. Never infer unknown scope or an exact timestamp. If the grant is clearly
+  delivered but its type remains unknown, record the outcome in source notes,
+  historyNote and the latest change; defer the typed event and type-specific
+  baseline rather than inventing reset/banked. Combined reassessment can proceed.
+
+### Reassess the remaining evidence
+- Retire the fulfilled promise from active support for another reset. Preserve it
+  as historical evidence of the completed event. Review other existing leads: a
+  separate unfulfilled promise must survive this transition even if it predates
+  the delivered grant. Do not simply discard all earlier sources by date.
+- With no remaining credible signals for another grant after that review, use LOW,
+  lower position, as the new starting judgement and explain it in positionReason.
+  LOW means little current support for another reset, not zero probability, a
+  measured frequency or evidence that future resets are impossible. Assess
+  confidence separately; confirmed delivery does not make the next forecast certain.
+- If independent unfulfilled evidence justifies a higher level, retain that level
+  for the next reset and explain the exception. Time passing, unchanged bug totals
+  and repeated copies of the completed promise do not raise the new outlook.
+- If delivery is unverified, do not trigger this transition. If delivery is verified
+  but the next assessment cannot be completed, publish an incomplete review and say
+  prominently in summary and the latest explanation that the saved meter belongs
+  to the previous assessment and the next outlook is pending. Do not invent LOW or
+  mark discovery healthy merely to complete the transition.
+
+### Update current text and preserve history together
+Before publishing the same report, review all these existing fields:
+- summary: lead with confirmed delivery and its scope, then the outlook for the
+  next extra reset. Remove stale future-tense claims that the completed grant is
+  still awaited; do not replace uncertainties with guesses.
+- analysis.outlooks[any]: reassess level, position, confidence, trend, asOf,
+  provenance, reason, positionReason, support, against, missing and sourceIds. Remove
+  the fulfilled promise as an active prediction, retain relevant corrections and
+  independent outstanding signals. A move to LOW is a new subject, not a failed
+  prior forecast; explain this alongside the existing weakening trend label.
+- analysis.review: give the actual reassessment time, scope, considered delivery
+  and remaining evidence, and complete/incomplete status. Preserve source-check
+  times for originals not rechecked and keep coverage gaps and monitor failures.
+- analysis.changes: append a plain-English explanation beside the advertisement.
+  Say which forecast was fulfilled, what is now confirmed, why the next outlook
+  starts at LOW or stays higher, and what could change it. Never rewrite earlier
+  change entries or archived snapshots to make the old forecast look different.
+- events, historyNote and baselines: record the delivered grant once, with links,
+  actual dates and qualified scope. Advance only a reference whose type/scope
+  matches this grant. A banked grant does not reset an automatic-only reference.
+- sources and incident notes: keep original meaning, dates and corrections. Label
+  fulfilled promises as historical context in current notes when clarified; keep
+  links needed to explain the old and new assessments. A reset does not prove a
+  reported software or accounting problem is fixed.
+- importedLedger, incidents and analysis.history: retain cumulative totals and dated
+  comparisons. Do not zero counts or redate an imported interval sample. Recompute
+  only when its own evidence and type-specific reference support it, keeping prior
+  snapshots. The public copy must identify these as history, not current pressure
+  for another reset. Operating-usage totals and the hourly schedule also continue.
+
+Use the existing conditional publisher and exact readback. Verify that the current
+report shows delivery and the next assessment coherently, the prior forecast is
+still readable in the archive, and no duplicate event was created. A later re-read
+of the same delivery must not restart the round again.
+
+Example only after verified delivery and a completed remaining-evidence review:
+"The promised reset is now confirmed. The earlier VERY HIGH forecast was fulfilled.
+We are now assessing the next extra reset, starting at LOW because we have no
+remaining clear signals for another grant. A separate new promise or other credible
+evidence could change that. Earlier assessments remain in the history."
+
 ## Mandatory full assessment
 Every full run at 07:00 and 19:00 must explicitly reassess the single combined reset outlook. Publish `analysis.review` with `at`, `status` (`complete` or `incomplete`), `considered` (the actual new evidence and unresolved gaps), and `reason` (why levels/positions changed or remained unchanged). A complete review sets the outlook's `asOf` to that review time and `provenance` to `reviewed`, including when levels remain unchanged. Update reasons and supporting/opposing evidence truthfully. Do not advance review dates just because a run started. The review time must be within the run and no later than report publication.
 If assessment cannot be completed, publish an explicit incomplete review with its limitation and retain the last genuinely assessed outlook dates; or finish failed if publication is impossible. A full run cannot finish unchanged. A light update preserves the previous full review metadata unless an actual new full assessment was performed. Research/source coverage and assessment completeness are separate: explain material evidence gaps even in a completed assessment.

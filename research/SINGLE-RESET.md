@@ -38,3 +38,19 @@ reset types and is unchanged. No additional locale exists.
 Closure requires exact report readback and a subsequent scheduled run producing
 or retaining the single outlook with truthful source coverage. A local test or a
 manual format migration is not proof of that subsequent scheduled run.
+
+## Following a completed grant
+
+Follow WORKFLOW.md, "After a delivered reset: assess the next one". Reuse the
+existing event identity, source notes, current outlook, review and change log.
+Confirmed delivery closes that grant's forecast; LOW is the assessed starting
+point for the next grant only when no independent unfulfilled signals remain.
+Keep old reports unchanged and label historical text as historical. No cycle ID,
+new storage, automatic clock trigger or retention expansion is needed.
+
+English public copy covers the shared current page, outlook and change-log labels,
+and archive introduction. Metadata does not describe the handover and is unchanged.
+The publication regression test exercises pending-to-delivered-to-LOW reporting
+through the real handlers and SQLite while preserving the prior report and event
+identity. It verifies storage and display contracts, not the agent's future source
+judgement. Do not publish a simulated completion as current research.

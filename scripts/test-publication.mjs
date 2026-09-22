@@ -100,3 +100,38 @@ for(const invalidKinds of [[],['reset'],['banked'],['any','any'],['reset','banke
 const wrongLegacy=structuredClone(single);wrongLegacy.schemaVersion=4;
 assert(!researchSchema.safeParse(wrongLegacy).success,'Legacy contract remains unchanged');
 console.log('Passed: single-outlook publication, full-run completion, strict cardinality and legacy archive readback.');
+
+// A completed grant advances the current report without rewriting its forecast.
+// Synthetic sources exercise publication, not real-world delivery verification.
+const pendingGrant=structuredClone(single);
+pendingGrant.runId='test-grant-pending';pendingGrant.checkedAt=stamp(11000);
+pendingGrant.sources.push({id:'test-grant-promise',title:'Test fixture: extra grant promised',url:'https://x.com/thsottiaux/status/100001',tier:'STAFF',access:'read',provenance:'direct',checkedAt:stamp(10500),note:'Synthetic promise used only in this local test.'});
+const unknown={status:'unknown',detail:'Not established in this test fixture.',sourceIds:[]};
+pendingGrant.events.push({id:'test-extra-grant',kind:'banked',title:'Test fixture: promised extra grant',date:new Date(now).toISOString().slice(0,10),announcement:{status:'confirmed',detail:'Synthetic promise verified.',sourceIds:['test-grant-promise']},scope:structuredClone(unknown),timing:structuredClone(unknown),rollout:structuredClone(unknown)});
+pendingGrant.summary='Test fixture: an extra grant is promised, delivery unconfirmed.';
+Object.assign(pendingGrant.analysis.outlooks[0],{level:'VERY HIGH',position:'lower',positionReason:'Explicit fixture promise.',asOf:stamp(10500),provenance:'reviewed',reason:'The fixture grant is expected.',support:['Explicit fixture promise.'],against:['Delivery is not established.'],missing:'Delivery confirmation.',sourceIds:['test-grant-promise']});
+pendingGrant.analysis.review={at:stamp(10500),status:'complete',considered:['Synthetic promise.'],reason:'Awaiting the promised grant.'};
+assert.equal((await reports.POST(request(pendingGrant,single.runId))).status,200);
+const deliveredGrant=structuredClone(pendingGrant);
+deliveredGrant.runId='test-grant-delivered';deliveredGrant.checkedAt=stamp(13000);
+deliveredGrant.sources.push({id:'test-grant-delivery',title:'Test fixture: delivery confirmed',url:'https://openai.com/index/example-reset-delivery',tier:'OFFICIAL',access:'read',provenance:'direct',checkedAt:stamp(12000),note:'Synthetic delivery confirmation used only in this local test.'});
+deliveredGrant.events.find(e=>e.id==='test-extra-grant').rollout={status:'confirmed',detail:'The same fixture grant has been delivered to its eligible accounts.',sourceIds:['test-grant-delivery']};
+deliveredGrant.summary='Test fixture: the promised grant was delivered. The next reset outlook starts at LOW.';
+Object.assign(deliveredGrant.analysis.outlooks[0],{level:'LOW',position:'lower',positionReason:'No independent unfulfilled signals remain after the fixture review.',trend:'weakening',asOf:stamp(12500),reason:'The earlier forecast was fulfilled. LOW now concerns the next extra grant.',support:['No independent unfulfilled signal was found in the fixture review.'],against:['A new commitment could change the next outlook.'],missing:'Credible evidence of another grant.',sourceIds:['test-grant-delivery']});
+deliveredGrant.analysis.review={at:stamp(12500),status:'complete',considered:['Confirmed fixture delivery.','No remaining independent commitment in the fixture.'],reason:'Assess the next grant after completion.'};
+deliveredGrant.analysis.changes.push({at:stamp(12500),title:'Test fixture: delivered; next outlook LOW',detail:'The previous forecast was fulfilled. The next assessment starts at LOW; history is preserved.'});
+const unsupportedDelivery=structuredClone(deliveredGrant);
+unsupportedDelivery.sources.find(s=>s.id==='test-grant-delivery').tier='COMMUNITY';
+assert.equal((await reports.POST(request(unsupportedDelivery,pendingGrant.runId))).status,400,'A community report cannot establish confirmed delivery');
+assert.equal((await reports.POST(request(deliveredGrant,pendingGrant.runId))).status,200);
+assert.equal((await reports.POST(request(deliveredGrant,pendingGrant.runId))).status,200,'Retrying the same publication creates no extra grant');
+const currentGrant=(await (await reports.GET()).json()).research;
+assert.deepEqual(currentGrant,deliveredGrant);
+assert.equal(currentGrant.events.filter(e=>e.id==='test-extra-grant').length,1);
+const earlierGrant=(await (await history.GET(new Request('https://test/api/watchdog/history?report='+pendingGrant.runId))).json()).research;
+assert.deepEqual(earlierGrant,pendingGrant,'The original VERY HIGH forecast and pending rollout stay unchanged in the archive');
+assert.deepEqual(currentGrant.analysis.importedLedger,pendingGrant.analysis.importedLedger);
+assert.deepEqual(currentGrant.analysis.incidents,pendingGrant.analysis.incidents);
+assert.deepEqual(currentGrant.analysis.history,pendingGrant.analysis.history);
+assert.deepEqual((await (await status.GET()).json()).usage,nextUsage,'A new outlook does not reset operating totals');
+console.log('Passed: confirmed-delivery handover, LOW next outlook, one event identity, unchanged forecast archive and cumulative history.');
