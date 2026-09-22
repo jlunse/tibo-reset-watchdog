@@ -12,15 +12,17 @@ function component(file){
 }
 const {AnalysisPanel}=component('app/analysis-panel.tsx');
 const legacy=JSON.parse(fs.readFileSync('research/latest.json'));
-for(const version of [4,5]){
+for(const version of [4,5])for(const [level,position,filled] of [['HIGH','upper',9],['VERY HIGH','lower',10]]){
  const report=structuredClone(legacy);report.schemaVersion=version;
  const combined=report.analysis.outlooks.find(o=>o.kind==='any');
- combined.level='HIGH';combined.position='upper';combined.positionReason='Direct staff promise.';
+ combined.level=level;combined.position=position;combined.positionReason='Direct staff promise.';
  if(version===5)report.analysis.outlooks=[combined];
  const html=renderToStaticMarkup(React.createElement(AnalysisPanel,{report,fresh:false}));
  assert.equal((html.match(/class="outlook-card /g)||[]).length,1);
- assert(html.includes('RESET OUTLOOK'));assert(html.includes('HIGH'));
- assert(html.includes('upper part'));assert(html.includes('Saved outlook'));
+ assert(html.includes('RESET OUTLOOK'));assert(html.includes(`<h3>${level}<small>`));
+ assert.equal((html.match(/<b class="filled"/g)||[]).length,filled);
+ assert.equal(html.includes('VERY HIGH is a forecast, not confirmation'),level==='VERY HIGH');
+ assert(html.includes(`${position} part`));assert(html.includes('Saved outlook'));
  assert(!html.includes('AUTOMATIC RESET'));assert(!html.includes('BANKED RESET'));
  assert(html.includes('Why this outlook?'));assert(html.includes('Direct staff promise.'));
 }

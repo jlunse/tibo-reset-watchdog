@@ -101,8 +101,9 @@ resets, compensation, credits and rollout wording. Keep those search terms: sour
 authors use different words for the same user benefit. Prioritize Tibo and preserve
 all original-verification and context requirements above. A direct promise of a
 reset is positive evidence for this combined question even when its type is unknown.
-Unknown type alone is not a reason to lower the combined outlook. Unknown scope,
-credibility, timing and delivery still matter. Repeated interpretations of one post
+Unknown type, eligibility or exact clock time alone must not cap the combined
+outlook. Credibility, contradictory evidence and supported timing still matter;
+apply the explicit-promise decision sequence below. Repeated interpretations of one post
 remain one signal. Scheduled personal usage windows, purchased resets and merely
 spending an existing saved reset are not new extra-reset grants.
 
@@ -125,6 +126,57 @@ VERY HIGH. Position changes require evidence and a public explanation, never jus
 time passing or a check running. Level, confidence and trend remain distinct.
 Preserve absent positions in older reports; never invent a midpoint.
 
+## Weigh an explicit reset promise
+The existing research agent owns this qualitative decision. Apply the following
+sequence to the combined outlook; do not infer a numerical probability or add a
+keyword-based scoring service.
+1. Establish the original, author, wording and context. An explicit, credible
+   OFFICIAL or directly verified STAFF commitment to a forthcoming extra reset is
+   stronger than an ambiguous hint. Verify it concerns a new grant, not a routine
+   personal window, a purchase or redemption of an existing grant.
+2. Assess whether an extra reset will occur for some eligible users. This is not a
+   prediction that every user, or the reader's own account, will receive one.
+3. A clear, current commitment with no known material contradiction can justify
+   lower VERY HIGH before delivery. Use this as the starting judgement for that
+   evidence class, then explain any departure using actual evidence. Do not require
+   a delivery announcement to reach VERY HIGH: delivered is an observed outcome,
+   not a prerequisite for a strong forecast.
+4. Unknown type, eligibility or exact clock time does not by itself cap this
+   combined outlook at HIGH. Record those unknowns separately. They matter to the
+   outlook only when they undermine whether an extra grant will occur at all or
+   within the supported promised window. Do not invent a time zone or deadline.
+5. Weigh credible contrary evidence, author qualifications, cancellations and
+   delays. A withdrawn promise removes its support; a supported missed deadline or
+   delay can weaken the timing assessment. Never preserve VERY HIGH mechanically.
+   Earlier ambiguous hints are not independent confirmations and should not keep
+   limiting the existence of a promise after a later explicit statement resolves it.
+   Preserve their corrections and unresolved details in source notes and history.
+6. Assess confidence separately from level. Explain source access and verification
+   gaps, including any inability to check for later clarifications. A failed fetch
+   is a coverage gap, not evidence of cancellation or proof that nothing changed.
+   Previously verified evidence can be reweighed, with original source-check times
+   retained and the limited reassessment scope stated. Do not claim a healthy
+   discovery run or freshly checked originals; preserve monitoring failures.
+7. For a changed judgement on unchanged evidence, update the existing combined
+   outlook, review and public explanation together. Say that weighting changed,
+   not that a second announcement was discovered. Repeated copies remain one signal.
+
+Acceptance examples for applying this rule:
+- Verified explicit promise; type/scope/time unknown; no known contradiction:
+  lower VERY HIGH is justified, with confidence assessed separately. The September
+  22 promise qualifies on the previously verified record; later verification gaps
+  remain visible and medium confidence is retained in the targeted reassessment.
+- Cryptic reply, unverified copy, or uncertain grant meaning: investigate context;
+  no automatic promotion to VERY HIGH.
+- Verified cancellation, reversal or material delay: reassess downwards as warranted;
+  the prior promise does not create a permanent minimum level.
+- Confirmation of delivery: record the event and eligible scope, then reassess what
+  additional reset, if any, remains expected. Do not count redemption as a new grant.
+
+The public explanation is English only, in the shared page component and the
+existing outlook details. Metadata does not describe level thresholds and stays
+unchanged. No schema, storage owner, schedule or new forecast engine is introduced.
+
 ## Mandatory full assessment
 Every full run at 07:00 and 19:00 must explicitly reassess the single combined reset outlook. Publish `analysis.review` with `at`, `status` (`complete` or `incomplete`), `considered` (the actual new evidence and unresolved gaps), and `reason` (why levels/positions changed or remained unchanged). A complete review sets the outlook's `asOf` to that review time and `provenance` to `reviewed`, including when levels remain unchanged. Update reasons and supporting/opposing evidence truthfully. Do not advance review dates just because a run started. The review time must be within the run and no later than report publication.
 If assessment cannot be completed, publish an explicit incomplete review with its limitation and retain the last genuinely assessed outlook dates; or finish failed if publication is impossible. A full run cannot finish unchanged. A light update preserves the previous full review metadata unless an actual new full assessment was performed. Research/source coverage and assessment completeness are separate: explain material evidence gaps even in a completed assessment.
@@ -145,3 +197,4 @@ Configuration lives only in the ignored `.sites-runtime/usage-config.json`: `aut
 The existing authenticated status handler owns one `watchdog-usage-total` snapshot in the existing snapshots table. It is protected from report/run retention. The snapshot contains cumulative counters and a completion watermark; each update requires the previous update timestamp, and totals cannot regress. Exact readback verifies delivery. Lost responses are reconciled by reading the aggregate on the next collection, so previously counted completions are skipped. There is no new timer, database table or append-only local output. Storage is bounded to one aggregate and one small configuration file. The collector only reads existing Codex logs; it does not own or delete them. Run collection under the existing monitor command lock. A collection error leaves the prior aggregate intact and prints an unavailable diagnostic; it must not fail or suppress research. The public panel shows the actual measurement period and last update, including unmeasured completions. If telemetry files disappear before collection, that missing history cannot be reconstructed; inspect gaps before claiming coverage.
 
 Public copy remains English only. The experiment is client-rendered near the footer; page metadata is unchanged because it does not describe the usage measurement. Verify the raw-event collector with `python3 scripts/test-watchdog-usage.py`, and the actual status handler and SQLite persistence with `node --experimental-strip-types scripts/test-publication.mjs`.
+
