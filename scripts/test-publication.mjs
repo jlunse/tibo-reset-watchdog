@@ -76,3 +76,27 @@ assert.equal((await reports.POST(request({...fresh,runId:'test-usage-retention',
 assert.deepEqual((await (await status.GET()).json()).usage,nextUsage,'Report retention preserves the usage singleton');
 assert.equal(sql.prepare("SELECT COUNT(*) AS n FROM snapshots WHERE id='watchdog-usage-total'").get().n,1);
 console.log('Passed: usage authentication, strict totals, baseline conflicts, replay and retention.');
+
+// The real report/status/archive handlers accept one combined outlook without
+// invalidating the retained three-outlook reports.
+const single=structuredClone(fresh);
+single.schemaVersion=5;single.runId='test-single-reset';single.checkedAt=stamp(9000);
+single.analysis.outlooks=single.analysis.outlooks.filter(o=>o.kind==='any');
+single.analysis.review={at:stamp(8500),status:'complete',considered:['Verified staff promise.'],reason:'One combined reset assessment.'};
+single.analysis.outlooks[0].asOf=single.analysis.review.at;
+single.analysis.outlooks[0].provenance='reviewed';
+assert.equal((await reports.POST(request(single,'test-usage-retention'))).status,200);
+assert.deepEqual((await (await reports.GET()).json()).research,single);
+const singleStart={...start,runId:'test-single-full',startedAt:stamp(8000),updatedAt:stamp(8000)};
+assert.equal((await status.POST(request(singleStart))).status,200);
+assert.equal((await status.POST(request({...singleStart,status:'published',reportId:single.runId,updatedAt:stamp(10000)}))).status,200);
+const legacy=await (await history.GET(new Request('https://test/api/watchdog/history?report='+reviewed.runId))).json();
+assert.equal(legacy.research.analysis.outlooks.length,3);
+assert(researchSchema.safeParse(legacy.research).success);
+for(const invalidKinds of [[],['reset'],['banked'],['any','any'],['reset','banked','any']]){
+ const invalid=structuredClone(single);invalid.analysis.outlooks=invalidKinds.map(kind=>({...single.analysis.outlooks[0],kind}));
+ assert.equal((await reports.POST(request(invalid,single.runId))).status,400);
+}
+const wrongLegacy=structuredClone(single);wrongLegacy.schemaVersion=4;
+assert(!researchSchema.safeParse(wrongLegacy).success,'Legacy contract remains unchanged');
+console.log('Passed: single-outlook publication, full-run completion, strict cardinality and legacy archive readback.');

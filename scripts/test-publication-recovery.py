@@ -10,6 +10,27 @@ def module(name):
 monitor, prepare = module('monitor-run'), module('prepare-research')
 
 class RecoveryTests(unittest.TestCase):
+    def test_tibo_discovery_gap_cannot_finish_successfully(self):
+        with tempfile.TemporaryDirectory() as directory, contextlib.redirect_stdout(io.StringIO()):
+            root = pathlib.Path(directory)
+            sent = []
+            monitor.run(['start', 'light'], root, sent.append, '2026-09-22T06:00:00Z')
+            running = json.loads((root/'active-monitor-run.json').read_text())
+            for outcome in ('published', 'unchanged'):
+                with self.assertRaisesRegex(ValueError, 'Tibo discovery'):
+                    monitor.run(['finish', outcome, 'Search found nothing'], root, sent.append)
+                self.assertEqual(json.loads((root/'active-monitor-run.json').read_text()), running)
+            url = 'https://x.com/thsottiaux/status/2102254445082116335'
+            monitor.save(root/'run-coverage.json', [
+                {'name': 'Tibo discovery', 'status': 'checked', 'detail': 'Feed fallback: ' + url},
+                {'name': 'Tibo originals', 'status': 'checked', 'detail': 'Browser read: ' + url}])
+            monitor.run(['finish', 'published', 'Verified'], root, sent.append)
+            self.assertEqual(sent[-1]['status'], 'published')
+            monitor.run(['start', 'light'], root, sent.append)
+            self.assertFalse((root/'run-coverage.json').exists())
+            monitor.run(['finish', 'failed', 'Tibo coverage unavailable'], root, sent.append)
+            self.assertEqual(sent[-1]['status'], 'failed')
+
     def test_31st_change_retains_unpublished_and_preserves_baseline(self):
         old = [{'at': f'2026-09-19T00:{i:02}:00Z', 'title': str(i), 'detail': str(i)} for i in range(30)]
         new = {'at': '2026-09-20T00:00:00Z', 'title': 'New', 'detail': 'New'}
@@ -82,6 +103,19 @@ class RecoveryTests(unittest.TestCase):
             self.assertIn('fresh, source-linked', result.stderr)
             self.assertNotIn('Publish failed', result.stderr)
 
+    def test_single_reset_staff_guard_preserves_reassessment(self):
+        base, candidate = self.staff_candidate()
+        candidate['schemaVersion'] = 5
+        candidate['analysis']['outlooks'] = [o for o in candidate['analysis']['outlooks'] if o['kind'] == 'any']
+        with self.assertRaisesRegex(ValueError, 'fresh, source-linked'):
+            prepare.prepare(candidate, base)
+        outlook = candidate['analysis']['outlooks'][0]
+        outlook.update(asOf=candidate['checkedAt'], sourceIds=['timing-hint'])
+        self.assertEqual(prepare.prepare(candidate, base), candidate)
+        candidate['analysis']['outlooks'].append(copy.deepcopy(outlook))
+        with self.assertRaisesRegex(ValueError, 'every current outlook'):
+            prepare.prepare(candidate, base)
+
     def test_lost_post_response_is_read_back_not_reposted(self):
         saved, posts = [], []
         def transport(method, record=None, run_id=None):
@@ -137,4 +171,3 @@ class RecoveryTests(unittest.TestCase):
             self.assertEqual(unrelated.read_text(),'keep')
 
 if __name__=='__main__': unittest.main()
-

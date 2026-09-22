@@ -10,6 +10,8 @@ from urllib.parse import urlsplit
 def require_staff_reassessment(candidate, baseline):
     """New or changed staff evidence must reach the assessments, including copies."""
     old = baseline.get('research', baseline)
+    if old.get('schemaVersion') == 5 and candidate.get('schemaVersion') != 5:
+        raise ValueError('Current reports must retain the single-reset format')
     def post(source):
         url = urlsplit(source.get('url', ''))
         if url.hostname in ('x.com', 'twitter.com') and re.fullmatch(r'/(thsottiaux|reach_vb)/status/\d+/?', url.path):
@@ -31,8 +33,9 @@ def require_staff_reassessment(candidate, baseline):
         return  # Publish pending evidence visibly; do not invent completed assessments.
     outlooks = candidate.get('analysis', {}).get('outlooks', [])
     prior = {o['kind']: o for o in old.get('analysis', {}).get('outlooks', [])}
-    if {o['kind'] for o in outlooks} != {'reset', 'banked', 'any'}:
-        raise ValueError('Changed staff evidence requires all three outlook assessments')
+    expected = {'any'} if candidate.get('schemaVersion') == 5 else {'reset', 'banked', 'any'}
+    if len(outlooks) != len(expected) or {o['kind'] for o in outlooks} != expected:
+        raise ValueError('Changed staff evidence requires every current outlook assessment')
     for source in changed:
         for outlook in outlooks:
             if (source['id'] not in outlook.get('sourceIds', []) or
@@ -65,4 +68,3 @@ if __name__ == '__main__':
     result = prepare(json.loads(source.read_text()), json.loads(baseline.read_text()))
     output.write_text(json.dumps(result, indent=2) + '\n')
     print('Prepared report; older changes remain in the report archive')
-

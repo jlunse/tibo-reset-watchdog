@@ -8,7 +8,7 @@ Use short, plain English sentences. Keep summaries and change titles easy to sca
 ### Explain every published update
 Write each `analysis.changes[].detail` as a short explanation a curious reader can understand without reading earlier reports. The newest entry is shown in full immediately below the AltoTrail advertisement; it remains visible when the advertisement is dismissed. Older entries remain in the existing change log and report archive. Use two to four short paragraphs, separated by blank lines, within the existing 1,800-character limit. Old single-paragraph entries remain supported.
 
-Lead with what changed and its effect on the automatic and banked outlooks. Explain the concrete evidence and why it supports that decision, including why a level stayed unchanged when relevant. Clearly mark interpretation with language such as "our reading" or "this could mean". Close with the important uncertainty or evidence that would change the assessment. Speculation is optional and must have a stated basis; never invent a scenario merely to fill the explanation. Do not require a new reset announcement before considering other evidence, and do not treat missing confirmation as proof that a reset is unlikely.
+Lead with what changed and its effect on the single reset outlook. Explain the concrete evidence and why it supports that decision, including why a level stayed unchanged when relevant. Clearly mark interpretation with language such as "our reading" or "this could mean". Close with the important uncertainty or evidence that would change the assessment. Speculation is optional and must have a stated basis; never invent a scenario merely to fill the explanation. Do not require a new reset announcement before considering other evidence, and do not treat missing confirmation as proof that a reset is unlikely.
 
 Distinguish new adverse evidence from a correction to an earlier judgement. Explain a downgrade caused by weaker support as such. A level and the confidence in that level are different. Never turn a longer wait, more reports or an approaching event into a measured probability. Name unavailable originals when they materially limit the conclusion. Do not change assessment dates unless a genuine reassessment took place. A no-change check does not need a new report just to provide commentary.
 
@@ -22,7 +22,7 @@ Example for the September 21 downgrade, preserving its original assessment time:
 >
 > Past resets still justify watching closely. Stronger evidence linking the current situation to a new grant could change the outlook. ELEVATED is a cautious judgement, not a calculated probability.
 
-This standalone Site uses English only. Context interpretation uses the existing source notes, outlooks and change explanation. The methodology copy is shared by server rendering and hydration in `app/page.tsx`; page metadata is unchanged because it does not describe this step. Reuse the existing report contract and rendering; no forecast engine, extra source of truth or new publishing schedule is introduced.
+This standalone Site uses English only. Context interpretation uses the existing source notes, combined outlook and change explanation. The methodology copy is shared by server rendering and hydration in `app/page.tsx`; page metadata is unchanged because it does not describe this step. Reuse the existing report contract and rendering; no forecast engine, extra source of truth or new publishing schedule is introduced.
 
 ## Schedule and run lifecycle
 Temporarily every hour on the hour, Europe/Stockholm, until the operator requests a change. Full research at 07 and 19; other runs are change checks. This replaces the earlier three-hour and four-times-daily schedules. Execution requires the owner's Codex environment; do not promise continuous server monitoring.
@@ -35,13 +35,22 @@ Temporarily every hour on the hour, Europe/Stockholm, until the operator request
 
 ## Discovery beyond the source tasks
 ### Priority staff pass, every hour
+Tibo discovery is the first research task, ahead of GitHub. Search results alone NEVER satisfy it. In EVERY run:
+1. Open `https://x.com/thsottiaux` and `https://x.com/thsottiaux/with_replies` in the available browser. Record access failures rather than treating an empty/error timeline as no new posts.
+2. Open `https://codexreset.org/` directly, even if search finds nothing. Read its latest monitored Tibo link, collection timestamp and recent timeline. Use `https://recodex.lol/timeline` as a second discovery route. These are COMMUNITY link indexes, not authority for classification, probabilities or reply relationships. Do not assume their timestamps prove complete coverage.
+3. Compare discovered canonical post IDs with LIVE report sources. Inspect all new posts and replies within the 48-hour overlap, including non-reset wording. Open each material original in the browser and inspect context. A blocked profile does not mean individual post URLs are blocked. Revisit unresolved leads before lower-priority bug reports.
+4. In the existing `run-coverage.json`, add `Tibo discovery` and `Tibo originals` rows. Record actual routes, access gaps, newest canonical post URL, and disposition of new leads. Mark checked only after discovery and original checks were actually performed. Broader staff coverage may still be partial. Never reuse a prior run's check or invent a successful check to satisfy the guard.
+5. If no current discovery route works, or material originals cannot be verified, publish discovered leads as qualified/incomplete if possible, then finish **failed** with an explicit Tibo-coverage reason and notify the operator. Do not silently finish unchanged or claim a healthy check. The local monitor rejects successful completion without both checked rows and canonical URLs; this enforces recording, not external feed completeness.
+
+Regression case: the September 22 04:31 UTC post `https://x.com/thsottiaux/status/2102254445082116335` was absent from broad search results but present on the directly opened monitor, and its original was readable in the browser. The earlier staff-reassessment guard only caught sources already added to a candidate. It could not detect this discovery omission. Keep the original-context and same-run reassessment guards as well.
+
 Before broad GitHub discovery, search Tibo and VB posts AND replies independently of configured research inputs. Use a rolling 48-hour overlap, including older posts discovered late. Search each author without requiring the word "reset"; include timing, launch and credit hints. Follow exact phrases and canonical post IDs from supplied leads. Check the reply's parent and surrounding thread when accessible. Search-engine indexing and X access are incomplete: report that limitation instead of claiming comprehensive coverage.
 
 Treat a new or materially clarified reset, grant, timing or related launch hint as a priority lead even when ambiguous. Retain its canonical original URL in `sources`, its exact short wording, access/provenance and unresolved context in source notes, and the pending verification in public coverage. If only copies are readable, keep them COMMUNITY and the original unavailable; do not discard the lead or call it directly verified STAFF. Multiple copies of one post remain one signal. Prioritize unresolved staff leads again next run until clarified, superseded or explicitly closed with an explanation. Do not let an older correction about a different post suppress new evidence.
 
-Reassess all three outlooks in the SAME hourly run when a priority staff lead is added or materially changes. Do not wait for 07:00/19:00. Link the original source ID in every outlook, update reasons/support/against, timestamps and provenance, and explain the judgement in the newest change entry beside the advertisement. Evaluate the positive signal as well as uncertainty; neither automatic promotion to HIGH nor automatic dismissal for lack of confirmation is justified. A completed assessment of all outlooks uses `analysis.review`; name the targeted scope and preserve timestamps of sources not rechecked. If blocked, publish the lead and an explicit incomplete assessment rather than silently retaining apparently current forecasts.
+Reassess the single combined reset outlook in the SAME hourly run when a priority staff lead is added or materially changes. Do not wait for 07:00/19:00. Link the original source ID in the outlook, update reasons/support/against, timestamps and provenance, and explain the judgement in the newest change entry beside the advertisement. Evaluate the positive signal as well as uncertainty; neither automatic promotion to HIGH nor automatic dismissal for lack of confirmation is justified. A completed assessment of the combined outlook uses `analysis.review`; name the targeted scope and preserve timestamps of sources not rechecked. If blocked, publish the lead and an explicit incomplete assessment rather than silently retaining apparently current forecasts.
 
-`prepare-research.py` and the publisher reject new or materially changed sources from the registered staff post URLs unless all three outlooks have fresh, source-linked assessments and a new public explanation. The honest failure path is a new `incomplete` review whose `considered` entries name each pending source ID, with a new public explanation. This includes originals recorded as COMMUNITY/imported/unavailable, and ignores check-time-only changes. The guard verifies recording, not discovery completeness or the quality of a judgement. Resolve a rejection by assessing the evidence or recording the limitation, not by dropping the source or relabelling it.
+`prepare-research.py` and the publisher reject new or materially changed sources from the registered staff post URLs unless the combined outlook has a fresh, source-linked assessment and a new public explanation. The honest failure path is a new `incomplete` review whose `considered` entries name each pending source ID, with a new public explanation. This includes originals recorded as COMMUNITY/imported/unavailable, and ignores check-time-only changes. The guard verifies recording, not discovery completeness or the quality of a judgement. Resolve a rejection by assessing the evidence or recording the limitation, not by dropping the source or relabelling it.
 
 ### Interpret the conversation before weighing a hint
 For every material staff reply or ambiguous hint, inspect the parent post, any quoted post, relevant surrounding replies, and later clarifications by the staff author or the person addressed. Follow exact original URLs. When text fetching fails, try the original in the available browser before declaring it unavailable. Read visible text and relevant media only; mark media that cannot be inspected as a gap. A copy or a tracker classification cannot establish a reply relationship.
@@ -52,11 +61,11 @@ Record the context in the existing source `note`, with original links saved as s
 - Later clarification, who wrote it, and whether it supports or contradicts the reset interpretation. A participant's own post is direct COMMUNITY evidence of their explanation, not STAFF authority over OpenAI's plans.
 - The strongest supported reset reading, any supported alternative, and the resulting effect: strengthens, weakens, neutral or unresolved. Give the reason; do not turn these labels into a score or a probability.
 
-Use this interpretation in each outlook's existing `support`, `against`, `reason`, `missing` and `sourceIds`, and in the public update explanation beside the advertisement. Context can strengthen a cryptic hint even without the word reset, or remove weight previously assigned to it. A missing parent means unresolved context, not evidence for either outcome. Do not convert a clock phrase into a reset deadline unless both the event and time zone are supported.
+Use this interpretation in the combined outlook's existing `support`, `against`, `reason`, `missing` and `sourceIds`, and in the public update explanation beside the advertisement. Context can strengthen a cryptic hint even without the word reset, or remove weight previously assigned to it. A missing parent means unresolved context, not evidence for either outcome. Do not convert a clock phrase into a reset deadline unless both the event and time zone are supported.
 
 Two posts count as a continuing conversation only when the reply/quote relationship is verified. Repeated copies remain one signal. When using historical style, compare genuinely similar cryptic exchanges with known subsequent outcomes; an explicit livestream invitation is not a counterexample to a claim about cryptic reset hints. A few selected successes do not establish that such hints always precede resets.
 
-A material parent or clarification discovered later triggers the same-hour reassessment rule, even if the staff post itself is unchanged. Update the original staff source's `note` and include the linked context sources in the outlooks so the existing publication guard requires a new assessment and public explanation. Never leave a disproved interpretation in current support while merely appending a correction elsewhere. Preserve earlier reports and change entries as history. Prefer source-linked corrections over a conflicting imported watch interpretation and do not count a retracted lead as independent reset support.
+A material parent or clarification discovered later triggers the same-hour reassessment rule, even if the staff post itself is unchanged. Update the original staff source's `note` and include the linked context sources in the combined outlook so the existing publication guard requires a new assessment and public explanation. Never leave a disproved interpretation in current support while merely appending a correction elsewhere. Preserve earlier reports and change entries as history. Prefer source-linked corrections over a conflicting imported watch interpretation and do not count a retracted lead as independent reset support.
 
 September 21 regression example: the "3am" reply belongs to a GPT-6 Community Night post, whose author later rejects the reset interpretation. It must not reinforce the separate September 19 banked-reset exchange. Keep the latter as a qualified lead: its parent requests a banked reset while also discussing a delayed release. Future evidence may change this assessment; the example is not a permanent rule about Tuesdays.
 
@@ -67,7 +76,7 @@ Always include a staff discovery query without an X domain restriction or exact 
 ## Evidence, disagreement and history
 OFFICIAL > STAFF > COMMUNITY applies to public authority, not a probability formula. Announced, scope, timing and delivered are separate claims. Do not classify ambiguous hints as reset events when even the reset type is unknown. Preserve corrections visibly in analysis.changes and source notes. Distinguish ordinary usage windows, paid resets, targeted replacements and broad grants. Count only the latter in broad promotional history.
 Different watches interpreting the SAME post are not independent confirmations. State both interpretations and the evidence that would resolve the conflict. Use cautious editorial judgement; do not pick whichever source is newer or more optimistic. In particular the September 19 reply is ambiguous; no reset type, scope or Tuesday reset deadline is verified.
-Publish schemaVersion 4, forecasts empty, three qualitative outlooks. Separate level, confidence, as-of, imported/reviewed provenance, supporting/opposing evidence and missing decisive evidence. Bug counts and elapsed days do not mechanically increase outlooks or establish compensation policy.
+Publish schemaVersion 5, forecasts empty, and exactly one qualitative outlook with kind `any`. Separate level, confidence, as-of, imported/reviewed provenance, supporting/opposing evidence and missing decisive evidence. Bug counts and elapsed days do not mechanically increase outlooks or establish compensation policy.
 Imported ledger totals are snapshots, separate from individually reviewed originals. Import a newer supplied snapshot with its as-of, category reconciliation and attribution; never add overlapping totals. Watch-only reports stay outside strict bug counts. A repository code fix is not a reproduced accounting defect or a human STAFF statement. Exact source timestamps remain qualified when imported.
 Reconstruct historical intervals only from explicit per-event original anchors, reset type, date uncertainty and scope. Until then retain newer aggregate statistics as clearly dated imported analysis, not newly verified frequencies. Never interpret tiny survivor samples as calibrated probabilities. Historical official incidents belong to their actual cycle, not the current cycle.
 
@@ -80,12 +89,44 @@ Run:
 The publisher reads the ignored secret and verifies exact public equality. Never print/read the credential directly. A 409 requires fetching the newer report and reconciling. Preserve all valid prior history and source check timestamps. A targeted update may refresh report publication time but must not claim a full review of untouched sources.
 After status readback, notify only material findings/corrections, publication or monitoring failure, or required action. Unchanged checks stay quiet. Never purchase credits, consume resets or enable paid reload. Token telemetry is null when unavailable; do not infer per-run usage from account totals.
 
-## Outlook display and movement
-The public page displays automatic and banked outlooks only. Retain the legacy any outlook in stored reports for history and schema compatibility. Each visible outlook may include position (lower, middle, upper) and positionReason together. Assess position explicitly from supporting and opposing evidence; explain every move in analysis.changes. Never move it merely because time passed, more duplicate reports appeared, or a check ran. Keep level, position, confidence and trend distinct. Preserve an unassessed position as absent; never invent a midpoint for older reports.
+## One reset outlook
+The public question is: how strong are the signals of an extra reset? New reports
+contain only `analysis.outlooks: [{kind: "any", ...}]` in schemaVersion 5. Reuse the
+existing level, position, confidence, trend, evidence and review fields. Do not
+produce separate automatic and banked forecasts, average them, take their maximum,
+or copy the combined conclusion into redundant fields.
 
+Use one discovery pass covering reset, banked/saved grants, global/automatic
+resets, compensation, credits and rollout wording. Keep those search terms: source
+authors use different words for the same user benefit. Prioritize Tibo and preserve
+all original-verification and context requirements above. A direct promise of a
+reset is positive evidence for this combined question even when its type is unknown.
+Unknown type alone is not a reason to lower the combined outlook. Unknown scope,
+credibility, timing and delivery still matter. Repeated interpretations of one post
+remain one signal. Scheduled personal usage windows, purchased resets and merely
+spending an existing saved reset are not new extra-reset grants.
+
+Public current summaries, change titles and explanations describe "reset" with one
+level and one reason. Preserve the difference between promised and delivered, and
+state who is eligible when known. Put type-specific facts in expandable source and
+history details. Retain historic records and corrections verbatim; do not relabel
+old automatic-only interval statistics as statistics for all resets. A saved grant
+and its later redemption are not two new grant events.
+
+The current page displays the existing `any` assessment for both legacy and new
+reports. Legacy version 4 archives retain three assessments and remain readable;
+do not rewrite them. No database migration or duplicate forecast engine is needed.
+Each new assessment explicitly weighs its evidence; the migration may retain the
+existing combined assessment and original assessment time without inventing a new
+research review.
+
+The single meter retains lower/middle/upper positions within LOW, ELEVATED, HIGH and
+VERY HIGH. Position changes require evidence and a public explanation, never just
+time passing or a check running. Level, confidence and trend remain distinct.
+Preserve absent positions in older reports; never invent a midpoint.
 
 ## Mandatory full assessment
-Every full run at 07:00 and 19:00 must explicitly reassess all three stored outlooks. Publish `analysis.review` with `at`, `status` (`complete` or `incomplete`), `considered` (the actual new evidence and unresolved gaps), and `reason` (why levels/positions changed or remained unchanged). A complete review sets every outlook's `asOf` to that review time and `provenance` to `reviewed`, including when levels remain unchanged. Update reasons and supporting/opposing evidence truthfully. Do not advance review dates just because a run started. The review time must be within the run and no later than report publication.
+Every full run at 07:00 and 19:00 must explicitly reassess the single combined reset outlook. Publish `analysis.review` with `at`, `status` (`complete` or `incomplete`), `considered` (the actual new evidence and unresolved gaps), and `reason` (why levels/positions changed or remained unchanged). A complete review sets the outlook's `asOf` to that review time and `provenance` to `reviewed`, including when levels remain unchanged. Update reasons and supporting/opposing evidence truthfully. Do not advance review dates just because a run started. The review time must be within the run and no later than report publication.
 If assessment cannot be completed, publish an explicit incomplete review with its limitation and retain the last genuinely assessed outlook dates; or finish failed if publication is impossible. A full run cannot finish unchanged. A light update preserves the previous full review metadata unless an actual new full assessment was performed. Research/source coverage and assessment completeness are separate: explain material evidence gaps even in a completed assessment.
 
 ## Retention and recovery contract
@@ -104,5 +145,3 @@ Configuration lives only in the ignored `.sites-runtime/usage-config.json`: `aut
 The existing authenticated status handler owns one `watchdog-usage-total` snapshot in the existing snapshots table. It is protected from report/run retention. The snapshot contains cumulative counters and a completion watermark; each update requires the previous update timestamp, and totals cannot regress. Exact readback verifies delivery. Lost responses are reconciled by reading the aggregate on the next collection, so previously counted completions are skipped. There is no new timer, database table or append-only local output. Storage is bounded to one aggregate and one small configuration file. The collector only reads existing Codex logs; it does not own or delete them. Run collection under the existing monitor command lock. A collection error leaves the prior aggregate intact and prints an unavailable diagnostic; it must not fail or suppress research. The public panel shows the actual measurement period and last update, including unmeasured completions. If telemetry files disappear before collection, that missing history cannot be reconstructed; inspect gaps before claiming coverage.
 
 Public copy remains English only. The experiment is client-rendered near the footer; page metadata is unchanged because it does not describe the usage measurement. Verify the raw-event collector with `python3 scripts/test-watchdog-usage.py`, and the actual status handler and SQLite persistence with `node --experimental-strip-types scripts/test-publication.mjs`.
-
-

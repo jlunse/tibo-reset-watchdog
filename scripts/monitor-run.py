@@ -2,7 +2,7 @@
 """Publish run status with bounded retries and durable unacknowledged completion.
 start full|light|recovery; finish published|unchanged|failed DETAIL [REPORT_ID]; reconcile
 """
-import datetime, fcntl, json, os, pathlib, sys, time, urllib.request, urllib.error
+import datetime, fcntl, json, os, pathlib, re, sys, time, urllib.request, urllib.error
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 SITE_URL = os.environ.get('WATCHDOG_SITE_URL', '').rstrip('/')
 if not SITE_URL:
@@ -85,6 +85,23 @@ def record_log(root, record):
     temporary.replace(path)
 
 
+def require_tibo_coverage(channels):
+    """Require this run's explicit discovery and original-verification record.
+
+    This validates recorded coverage, not the completeness of an external feed.
+    start removes the previous run's coverage. Failed outcomes remain deliverable.
+    """
+    rows = {row.get('name'): row for row in channels}
+    discovery = rows.get('Tibo discovery', {})
+    original = rows.get('Tibo originals', {})
+    post = r'https://x\.com/thsottiaux/status/\d+'
+    if (discovery.get('status') != 'checked' or
+        not re.search(post, discovery.get('detail', '')) or
+        original.get('status') != 'checked' or
+        not re.search(post, original.get('detail', ''))):
+        raise ValueError('Tibo discovery and originals must be checked with canonical post URLs; otherwise finish failed')
+
+
 def run(args, root=None, send=deliver, now=None):
     root = root or ROOT / '.sites-runtime'
     path = safe_path(root, 'active-monitor-run.json')
@@ -125,6 +142,8 @@ def run(args, root=None, send=deliver, now=None):
             coverage = safe_path(root, 'run-coverage.json')
             if coverage.exists():
                 record['channels'] = json.loads(coverage.read_text())
+            if args[1] != 'failed':
+                require_tibo_coverage(record.get('channels', []))
     else:
         raise ValueError('Invalid command')
     save(path, record)
