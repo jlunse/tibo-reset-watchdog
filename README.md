@@ -1,3 +1,5 @@
+> **Experiment completed — 23 September 2026.** Active monitoring has ended. The site now presents the outcome and lessons; retained reports describe historical assessments. The code and methodology remain available for reference.
+
 # Tibo Reset Watchdog
 
 An unofficial, playful dashboard for public Codex reset research, source-backed updates, qualitative outlooks, and research-run status. It is not affiliated with OpenAI and does not access your account, purchase credits, or perform resets.

@@ -1,3 +1,7 @@
+# Experiment concluded
+
+The owner ended active monitoring on 23 September 2026. Scheduled research is paused. Do not resume research or editorial updates without the owner's explicit instruction. The procedure below is retained as historical methodology.
+
 # Shared Reset Watchdog research and publication
 
 All website content and public run status must be English. Never publish private account observations, private project advice, full transcripts, credentials or conversation IDs. Use the existing Site and authenticated report endpoint; no redeployment is needed for research updates.

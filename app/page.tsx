@@ -1,37 +1,19 @@
-'use client';
-import { useCallback, useEffect, useState, useRef } from 'react';
-import { ArrowUpRight, RefreshCw, Radio, RotateCcw, Bookmark, Info } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { AnalysisPanel } from './analysis-panel';
-import { MonitorPanel } from './monitor-panel';
-import { AltoTrailPromo } from './altotrail-promo';
-import { UpdateExplanation } from './update-explanation';
-import { UsagePanel } from './usage-panel';
-import type { Research, ResearchView } from '@/lib/research';
-const date=(s:string)=>new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Stockholm',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',timeZoneName:'short'}).format(new Date(s));
-export default function Home(){
- const [data,setData]=useState<ResearchView|null>(null),[busy,setBusy]=useState(true),[error,setError]=useState(''),[now,setNow]=useState(Date.now());
- const loadedReport=useRef<string|undefined>(undefined);
- const refresh=useCallback(async()=>{setBusy(true);setError('');try{const response=await fetch('/api/watchdog',{cache:'no-store'});if(!response.ok)throw new Error();const next=await response.json() as ResearchView;setData(next);loadedReport.current=next.research?.runId;setNow(Date.now());}catch{setError('Could not refresh the page. The last loaded report is shown below.');}finally{setBusy(false);}},[]);
- const onReportPublished=useCallback((id:string)=>{if(loadedReport.current&&id!==loadedReport.current)void refresh();},[refresh]);
- useEffect(()=>{refresh();const poll=setInterval(refresh,60000),clock=setInterval(()=>setNow(Date.now()),60000);return()=>{clearInterval(poll);clearInterval(clock)}},[refresh]);
- const r=data?.research,fresh=!!r&&now<Date.parse(r.validUntil)&&!error;
- const sources=(ids:string[])=>ids.map(id=>r?.sources.find(s=>s.id===id)).filter(Boolean) as Research['sources'];
- return <main>
- <header className="topbar"><a href="#" className="brand"><span className="brand-icon"><Radio size={23}/></span><span>TIBO<span className="brand-light"> / RESET WATCHDOG</span></span></a><span className="experiment">AN UNOFFICIAL EXPERIMENT <span>v.05</span></span></header>
- <section className="intro"><div><div className="eyebrow">THE RESET WEATHER REPORT</div><h1>Any resets on the horizon<span>?</span></h1><p>Codex reset news, checked hourly. No promises. Just the evidence.</p></div><div className="update"><Button variant="outline" onClick={refresh} disabled={busy}><RefreshCw size={15} className={busy?'spin':''}/>{busy?'Loading report…':'Refresh report'}</Button><span>{r?`Last changed ${date(r.checkedAt)}`:'Waiting for research'}</span></div></section>
- <div className="statusline" role="status"><span className={'status-dot '+(fresh?'ok':'')}/><span>{error?'Connection interrupted':r?fresh?'Latest saved report':'Report needs a fresh check':'No research report available'}</span><span className="status-source">OFFICIAL → STAFF → COMMUNITY</span></div>
- {(error||data?.message)&&<p className="notice" role="alert">{error||data?.message}</p>}
- <section className="research-brief"><div className="eyebrow">WHAT WE KNOW RIGHT NOW</div><h2>What’s new?</h2><details><summary>Read the latest findings</summary><p>{r?.summary??'The first report will appear here once it has been checked.'}</p></details></section>
- <MonitorPanel onReportPublished={onReportPublished}/>
- <AltoTrailPromo/>
- {r?.analysis&&<UpdateExplanation changes={r.analysis.changes} fresh={fresh}/>}
-{r&&<AnalysisPanel report={r} fresh={fresh}/>}
- <section className="lower-grid"><article className="history-panel"><div className="section-top"><div><div className="eyebrow">THE PAPER TRAIL</div><h2>Reset history</h2></div></div><details><summary>About this history</summary><p className="fine">{r?.historyNote}</p>{r?.baselines?.map(b=><p className="fine" key={b.kind}><strong>{b.date} · {b.label}</strong><br/>{b.detail}</p>)}</details><div className="timeline">{r?.events.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(e=><div className={'event '+e.kind} key={e.id}><div className="event-marker">{e.kind==='reset'?<RotateCcw size={15}/>:<Bookmark size={15}/>}</div><div className="event-body"><div className="event-meta"><time dateTime={e.date}>{e.date}</time></div><h3 className="event-title">Reset</h3><details><summary>What was confirmed?</summary><p>{e.title}</p><div className="claim-grid">{(['announcement','scope','timing','rollout'] as const).map(k=><div className="claim" key={k}><strong>{k==='timing'?'Time':k} <span className={'claim-status '+e[k].status}>{e[k].status==='imported'?'previous research':e[k].status}</span></strong><p>{e[k].detail}</p><div className="source-links">{sources(e[k].sourceIds).map(s=><a href={s.url} key={s.id} target="_blank" rel="noreferrer">{s.tier} · {s.title} <ArrowUpRight size={11}/></a>)}</div></div>)}</div></details></div></div>)??<p className="empty">No report loaded yet.</p>}</div></article>
- <aside className="right-column"><article className="pattern-panel"><div className="eyebrow">HONEST ABOUT THE BLIND SPOTS</div><h2>What we checked</h2><details><summary>Sources checked and gaps</summary>{r?.coverage.map(c=><div className="coverage-item" key={c.channel}><strong>{c.channel}<span className={'claim-status '+c.status}>{c.status}</span></strong><p>{c.detail}</p></div>)}<p className="fine">We may miss updates. If a source cannot be read, we say so.</p></details></article><article className="tibo-note"><span className="eyebrow">A LITTLE STATISTICS</span><h3>History is not a timetable.</h3><details><summary>About the sample</summary><p>{r?.events.filter(e=>e.rollout.status==='confirmed').length??0} events in this report have confirmed rollout claims. This count excludes imported claims. Previously researched events remain visible separately; the sample is too small to fit a reliable prediction model.</p></details><p>A long wait does not mean a reset is due.</p></article></aside></section>
- <section className="research-brief" id="sources"><div className="eyebrow">FOLLOW THE ORIGINALS</div><h2>Sources</h2><details><summary>Browse sources and research notes</summary><div className="source-grid">{r?.sources.map(s=><article key={s.id}><div><span className="evidence">{s.tier}</span> <span className="fine">{s.provenance==='imported-research'?'Imported from previous research':s.access==='read'?'Original page read':s.access==='search-only'?'Search excerpt only':'Original unavailable'}</span></div><a href={s.url} target="_blank" rel="noreferrer">{s.title} <ArrowUpRight size={14}/></a><p>{s.note}</p>{s.importNote&&<p className="fine">{s.importNote}</p>}<small>Checked {date(s.checkedAt)}</small></article>)}</div></details></section>
- <section id="method" className="method"><div><div className="eyebrow">HOW IT WORKS</div><h2>Checked hourly. Updated when it matters.</h2></div><details><summary>How we check the evidence</summary><div className="method-grid"><div><span>01 / RESEARCH</span><h3>Go to the source</h3><p>We check Tibo’s posts first, then OpenAI’s pages, other staff posts and community reports. For replies, we read the original conversation and later clarifications. If context is missing, we say so.</p></div><div><span>02 / SEPARATE</span><h3>Check each claim</h3><p>Was a reset announced? Who gets it? When? Has it arrived? We check these separately. Earlier research keeps its sources and dates, even when an original post is no longer accessible.</p></div><div><span>03 / SHARE</span><h3>Keep a clear record</h3><p>One outlook covers an extra reset, whether applied directly or saved for later. A clear, verified promise can support VERY HIGH before delivery is confirmed. Unknown type or eligibility alone does not lower that outlook. Delays, reversals and conflicting evidence can change it. This does not promise a reset to every account. We explain each change. Outlooks are informed guesses, not measured odds.</p><p>After a confirmed reset, we assess the next one. We start at LOW if no remaining signals support another grant. Earlier forecasts stay in the history; continued rollout or use of the same saved reset is not a new grant.</p></div></div></details><div className="collection-note"><Radio size={17}/><p>Checks run on the DEV3 server every hour. Full reviews run at 07:00 and 19:00 Stockholm time. Your computer does not need to be on. This page checks for new reports every minute.</p></div></section>
- <UsagePanel/>
- <footer><span className="footer-brand">TIBO / RESET WATCHDOG</span><span>Built for curiosity. Not certainty.</span><a href="/api/watchdog" target="_blank" rel="noreferrer">Report data <ArrowUpRight size={13}/></a></footer>
- </main>
+import styles from './conclusion.module.css';
+
+export default function Home() {
+  return <main className={styles.page}>
+    <header className={styles.header}><a href="/">TIBO / RESET WATCHDOG</a><span>Independent experiment</span></header>
+    <section className={styles.intro}>
+      <p className={styles.label}>Experiment completed · 23 September 2026</p>
+      <h1>A reset arrived.<br/><span>The experiment is complete.</span></h1>
+      <p className={styles.lead}>We set out to follow public signals of an extra OpenAI Codex reset and explain the evidence in plain English. The project owner considers that experiment successful and has ended active monitoring.</p>
+      <a className={styles.button} href="https://github.com/jlunse/tibo-reset-watchdog" target="_blank" rel="noreferrer">Explore the project on GitHub ↗</a>
+    </section>
+    <section className={styles.summary} aria-label="Experiment summary">
+      <article><p className={styles.label}>What happened</p><h2>From a promise to an account report</h2><p>Tibo publicly promised a reset on 22 September. On 23 September, the project owner reported receiving and activating a saved reset. That supports delivery to one account; it does not establish that every eligible account received it.</p></article>
+      <article><p className={styles.label}>What we learned</p><h2>Read the source. Keep the context.</h2><p>Staff statements were the most useful signals. Search results could miss important posts, and a promise, a rollout announcement and a delivery report each told a different part of the story. The outlook was an editorial judgement, not a measured probability.</p></article>
+      <article><p className={styles.label}>What remains</p><h2>The work stays available</h2><p>This page records the conclusion of the experiment. There is no current reset forecast or next scheduled check. The code and methodology remain on GitHub, and retained reports can still be explored as historical records.</p><a className={styles.link} href="/history">Read earlier reports →</a></article>
+    </section>
+    <footer className={styles.footer}><span>An unofficial project. Not affiliated with OpenAI.</span><span>Completed, with the lessons preserved.</span></footer>
+  </main>;
 }
